@@ -1,0 +1,2139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ARCHIVE: SHREYAS ZEESHAN</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Space+Grotesk:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=EB+Garamond:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  --pro-bg: #07080f;
+  --pro-bg2: #0d0f1a;
+  --pro-surface: #111520;
+  --pro-border: rgba(74, 127, 165, 0.18);
+  --pro-text: #b8c2cc;
+  --pro-text-dim: #4a5568;
+  --pro-text-bright: #dde4ec;
+  --pro-accent: #4a7fa5;
+  --pro-purple: #7b6fa8;
+  --pro-glow: rgba(74, 127, 165, 0.12);
+  --pro-font-mono: 'Space Mono', monospace;
+  --pro-font-body: 'Space Grotesk', sans-serif;
+
+  --per-bg: #130f0a;
+  --per-bg2: #1c1610;
+  --per-surface: #221c14;
+  --per-border: rgba(143, 168, 136, 0.18);
+  --per-text: #d9cfc3;
+  --per-text-dim: #6b5e4e;
+  --per-text-bright: #ede5d8;
+  --per-accent: #8fa888;
+  --per-blue: #7ba3b0;
+  --per-glow: rgba(143, 168, 136, 0.10);
+  --per-font-serif: 'Playfair Display', serif;
+  --per-font-body: 'EB Garamond', serif;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background: var(--pro-bg);
+  color: var(--pro-text);
+  font-family: var(--pro-font-body);
+  min-height: 100vh;
+  overflow-x: hidden;
+  transition: background 0.8s ease, color 0.8s ease;
+}
+
+body.personal {
+  background: var(--per-bg);
+  color: var(--per-text);
+}
+
+/* GRAIN OVERLAY */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 1000;
+  opacity: 0.5;
+}
+
+/* SCANLINES */
+body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    transparent,
+    transparent 2px,
+    rgba(0,0,0,0.03) 2px,
+    rgba(0,0,0,0.03) 4px
+  );
+  pointer-events: none;
+  z-index: 999;
+}
+
+/* CANVAS */
+#particles-canvas {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 0;
+  opacity: 1;
+  transition: opacity 1s ease;
+}
+
+body.personal #particles-canvas { opacity: 0; }
+
+/* ===== IDENTITY TOGGLE NAV ===== */
+#identity-nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 500;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 2.5rem;
+  height: 52px;
+  border-bottom: 1px solid var(--pro-border);
+  background: rgba(7,8,15,0.85);
+  backdrop-filter: blur(12px);
+  transition: background 0.8s ease, border-color 0.8s ease;
+}
+
+body.personal #identity-nav {
+  border-bottom-color: var(--per-border);
+  background: rgba(19,15,10,0.85);
+}
+
+.nav-logo {
+  font-family: var(--pro-font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.2em;
+  color: var(--pro-text-dim);
+  transition: color 0.8s;
+}
+body.personal .nav-logo { color: var(--per-text-dim); font-family: 'EB Garamond', serif; font-size: 0.8rem; }
+
+.nav-id-label { font-size: 0.55rem; display: block; letter-spacing: 0.3em; }
+.nav-id-name { font-size: 0.7rem; letter-spacing: 0.15em; }
+
+.identity-switch {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  border: 1px solid var(--pro-border);
+  border-radius: 2px;
+  overflow: hidden;
+  transition: border-color 0.8s;
+}
+body.personal .identity-switch { border-color: var(--per-border); }
+
+.switch-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 6px 16px;
+  font-family: var(--pro-font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.2em;
+  color: var(--pro-text-dim);
+  transition: all 0.3s;
+  position: relative;
+}
+.switch-btn.active {
+  background: var(--pro-accent);
+  color: #fff;
+}
+body.personal .switch-btn { font-family: 'EB Garamond', serif; font-size: 0.75rem; letter-spacing: 0.1em; }
+body.personal .switch-btn.active { background: var(--per-accent); color: #0a0a08; }
+
+.switch-divider {
+  width: 1px;
+  height: 28px;
+  background: var(--pro-border);
+  transition: background 0.8s;
+}
+body.personal .switch-divider { background: var(--per-border); }
+
+/* ===== SIDES ===== */
+#pro-side, #personal-side {
+  position: relative;
+  z-index: 1;
+  min-height: 100vh;
+  padding-top: 52px;
+  transition: opacity 0.6s ease, transform 0.6s ease;
+}
+
+#pro-side { display: block; }
+#personal-side { display: none; }
+
+body.personal #pro-side { display: none; }
+body.personal #personal-side { display: block; }
+
+/* ===== PROFESSIONAL SIDE ===== */
+
+/* PRO HERO */
+.pro-hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 3rem;
+  position: relative;
+  overflow: hidden;
+}
+
+/* RED COSMIC DUST — inspired by the crimson astronaut stardust */
+.hero-red-glow {
+  position: absolute;
+  top: 0; right: 0;
+  width: 65%;
+  height: 100%;
+  background:
+    radial-gradient(ellipse at 80% 28%, rgba(210, 18, 12, 0.09) 0%, transparent 44%),
+    radial-gradient(ellipse at 62% 60%, rgba(170, 10, 8, 0.06) 0%, transparent 36%),
+    radial-gradient(ellipse at 92% 72%, rgba(230, 35, 18, 0.05) 0%, transparent 28%),
+    radial-gradient(ellipse at 70% 10%, rgba(190, 14, 10, 0.04) 0%, transparent 30%);
+  mix-blend-mode: screen;
+  pointer-events: none;
+  animation: red-glow-breathe 7s ease-in-out infinite;
+}
+
+@keyframes red-glow-breathe {
+  0%, 100% { opacity: 0.75; }
+  50% { opacity: 1.15; }
+}
+
+/* CRIMSON BOKEH SPARKLES — scattered stardust dots */
+.hero-red-sparkles {
+  position: absolute;
+  top: 0; left: 0;
+  width: 2px; height: 2px;
+  border-radius: 50%;
+  pointer-events: none;
+  mix-blend-mode: screen;
+  box-shadow:
+    834px  92px 3px 1px rgba(255, 70, 55, 0.55),
+    962px 177px 2px 2px rgba(220, 28, 18, 0.40),
+    1108px  58px 4px 1px rgba(255, 95, 75, 0.48),
+    1258px 215px 2px 2px rgba(200, 18, 12, 0.35),
+    1052px 295px 3px 1px rgba(240, 48, 36, 0.52),
+    786px  318px 2px 1px rgba(255, 58, 45, 0.42),
+    1185px 408px 4px 2px rgba(180, 14, 8, 0.32),
+    908px  435px 2px 1px rgba(255, 88, 68, 0.44),
+    1305px 352px 3px 1px rgba(220, 38, 26, 0.36),
+    1155px 498px 2px 1px rgba(255, 68, 52, 0.46),
+    862px  558px 3px 2px rgba(200, 24, 14, 0.26),
+    1030px 608px 2px 1px rgba(180, 20, 10, 0.32),
+    758px  628px 4px 1px rgba(230, 32, 22, 0.22),
+    1228px 588px 2px 1px rgba(255, 82, 64, 0.38),
+    988px  708px 3px 1px rgba(200, 28, 16, 0.28),
+    1112px 752px 2px 2px rgba(220, 42, 32, 0.20),
+    848px  758px 3px 1px rgba(255, 62, 48, 0.30),
+    1338px 138px 4px 2px rgba(240, 52, 42, 0.44),
+    1378px 485px 2px 1px rgba(200, 20, 12, 0.25),
+    678px  195px 3px 1px rgba(255, 72, 55, 0.32),
+    628px  448px 2px 1px rgba(180, 16, 8, 0.22),
+    1295px 685px 3px 1px rgba(230, 36, 25, 0.28),
+    945px  825px 4px 2px rgba(200, 26, 15, 0.18),
+    1192px 858px 2px 1px rgba(255, 78, 60, 0.22),
+    1068px 142px 3px 1px rgba(240, 60, 46, 0.38),
+    720px  520px 2px 1px rgba(210, 30, 20, 0.24),
+    1420px 310px 3px 2px rgba(255, 50, 38, 0.30);
+  animation: sparkle-twinkle 5.5s ease-in-out infinite;
+}
+
+@keyframes sparkle-twinkle {
+  0%   { opacity: 0.55; }
+  20%  { opacity: 0.95; }
+  45%  { opacity: 0.38; }
+  70%  { opacity: 1.00; }
+  85%  { opacity: 0.50; }
+  100% { opacity: 0.55; }
+}
+
+/* SAGITTARIUS CONSTELLATION */
+#sagittarius-constellation {
+  position: fixed;
+  right: 3%;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 500px;
+  height: 360px;
+  pointer-events: none;
+  z-index: 1;
+  opacity: 1;
+  transition: opacity 1.2s ease;
+}
+body.personal #sagittarius-constellation { opacity: 0; }
+
+.sgr-star        { animation: sgr-twinkle 4.2s ease-in-out infinite; }
+.sgr-star-bright { animation: sgr-twinkle 5.8s ease-in-out infinite; }
+
+@keyframes sgr-twinkle {
+  0%, 100% { opacity: 0.80; }
+  30%      { opacity: 1.00; }
+  60%      { opacity: 0.55; }
+  80%      { opacity: 0.90; }
+}
+
+/* AURORA WARP STREAK — fixed overlay, pro side only, from the second image */
+#aurora-bg {
+  position: fixed;
+  right: -180px;
+  top: 8%;
+  width: 720px;
+  height: 80vh;
+  background: linear-gradient(172deg,
+    transparent          0%,
+    rgba(230, 148, 28, 0.055) 14%,
+    rgba(215,  82, 208, 0.07) 27%,
+    rgba(85,  118, 238, 0.065) 40%,
+    rgba(28,  200, 215, 0.048) 52%,
+    rgba(175,  58, 200, 0.06) 63%,
+    rgba(240, 120,  40, 0.04) 73%,
+    transparent          86%
+  );
+  filter: blur(55px);
+  pointer-events: none;
+  z-index: 2;
+  mix-blend-mode: screen;
+  animation: aurora-drift 16s ease-in-out infinite;
+  transition: opacity 1.2s ease;
+}
+
+body.personal #aurora-bg { opacity: 0; pointer-events: none; }
+
+@keyframes aurora-drift {
+  0%,  100% { opacity: 0.72; transform: translateY(0px) scaleX(1.00); }
+  30%        { opacity: 1.00; transform: translateY(-12px) scaleX(1.03); }
+  65%        { opacity: 0.82; transform: translateY(7px) scaleX(0.97); }
+}
+
+.pro-hero-meta {
+  font-family: var(--pro-font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.3em;
+  color: var(--pro-text-dim);
+  margin-bottom: 2.5rem;
+  display: flex;
+  gap: 3rem;
+  flex-wrap: wrap;
+}
+.meta-item { display: flex; flex-direction: column; gap: 4px; }
+.meta-label { font-size: 0.5rem; letter-spacing: 0.4em; opacity: 0.6; }
+.meta-value { color: var(--pro-accent); }
+
+.pro-hero-name {
+  font-family: var(--pro-font-mono);
+  font-size: clamp(2.8rem, 7vw, 6.5rem);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 0.9;
+  color: var(--pro-text-bright);
+  margin-bottom: 0.5rem;
+  text-transform: uppercase;
+}
+
+.pro-hero-name span {
+  display: block;
+  font-size: clamp(1rem, 2.5vw, 1.8rem);
+  font-weight: 400;
+  letter-spacing: 0.25em;
+  color: var(--pro-accent);
+  margin-top: 0.8rem;
+  opacity: 0.8;
+}
+
+.pro-hero-mission {
+  max-width: 560px;
+  margin-top: 3rem;
+  font-size: 0.9rem;
+  line-height: 1.8;
+  color: var(--pro-text);
+  font-family: var(--pro-font-body);
+  font-weight: 300;
+  border-left: 1px solid var(--pro-border);
+  padding-left: 1.5rem;
+}
+
+.pro-hero-mission em {
+  font-style: italic;
+  color: var(--pro-purple);
+  opacity: 0.9;
+}
+
+.hero-scroll-indicator {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 3rem;
+  font-family: var(--pro-font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  color: var(--pro-text-dim);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+.hero-scroll-indicator::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 1px;
+  background: var(--pro-text-dim);
+  animation: scanline-pulse 2s ease-in-out infinite;
+}
+
+@keyframes scanline-pulse {
+  0%, 100% { opacity: 0.3; }
+  50% { opacity: 1; }
+}
+
+.hero-grid-lines {
+  position: absolute;
+  top: 0; right: 0;
+  width: 50%;
+  height: 100%;
+  pointer-events: none;
+  opacity: 0.04;
+  background-image:
+    linear-gradient(var(--pro-accent) 1px, transparent 1px),
+    linear-gradient(90deg, var(--pro-accent) 1px, transparent 1px);
+  background-size: 60px 60px;
+}
+
+.hero-corner-brackets {
+  position: absolute;
+  bottom: 3rem;
+  right: 3rem;
+  width: 60px;
+  height: 60px;
+  pointer-events: none;
+}
+.hero-corner-brackets::before,
+.hero-corner-brackets::after {
+  content: '';
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  border-color: var(--pro-accent);
+  border-style: solid;
+  opacity: 0.3;
+}
+.hero-corner-brackets::before { bottom: 0; right: 0; border-width: 0 1px 1px 0; }
+.hero-corner-brackets::after { top: 0; left: 0; border-width: 1px 0 0 1px; }
+
+/* PRO SECTION COMMON */
+.pro-section {
+  padding: 6rem 3rem;
+  border-top: 1px solid var(--pro-border);
+  position: relative;
+}
+
+.section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.section-tag {
+  font-family: var(--pro-font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.35em;
+  color: var(--pro-accent);
+  text-transform: uppercase;
+}
+
+.section-title {
+  font-family: var(--pro-font-mono);
+  font-size: clamp(1rem, 2.5vw, 1.4rem);
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: var(--pro-text-bright);
+  text-transform: uppercase;
+}
+
+.section-line {
+  flex: 1;
+  height: 1px;
+  background: var(--pro-border);
+}
+
+/* PRO ABOUT */
+.pro-about-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: start;
+}
+
+.about-philosophy {
+  font-size: 0.95rem;
+  line-height: 1.9;
+  color: var(--pro-text);
+  font-weight: 300;
+}
+
+.about-philosophy p { margin-bottom: 1.4rem; }
+.about-philosophy strong { color: var(--pro-text-bright); font-weight: 500; }
+
+.about-specs {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  border: 1px solid var(--pro-border);
+  padding: 1.5rem;
+  background: var(--pro-surface);
+  position: relative;
+}
+
+.about-specs::before {
+  content: 'SYSTEM DIAGNOSTIC / LIVE';
+  position: absolute;
+  top: -0.7rem;
+  left: 1rem;
+  font-family: var(--pro-font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.3em;
+  color: var(--pro-accent);
+  background: var(--pro-surface);
+  padding: 0 0.5rem;
+}
+
+.spec-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--pro-border);
+  font-family: var(--pro-font-mono);
+  font-size: 0.65rem;
+}
+.spec-row:last-child { border-bottom: none; }
+.spec-key { color: var(--pro-text-dim); letter-spacing: 0.15em; }
+.spec-val { color: var(--pro-text-bright); text-align: right; }
+.spec-bar {
+  width: 80px;
+  height: 2px;
+  background: rgba(74,127,165,0.15);
+  position: relative;
+  overflow: hidden;
+}
+.spec-bar-fill {
+  position: absolute;
+  top: 0; left: 0;
+  height: 100%;
+  background: var(--pro-accent);
+  animation: bar-load 2s ease forwards;
+}
+@keyframes bar-load { from { width: 0; } }
+
+/* PRO PROJECTS */
+.projects-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5px;
+  border: 1.5px solid var(--pro-border);
+}
+
+.mission-card {
+  background: var(--pro-surface);
+  padding: 2rem;
+  border-right: 1px solid var(--pro-border);
+  border-bottom: 1px solid var(--pro-border);
+  cursor: pointer;
+  transition: background 0.3s ease;
+  position: relative;
+  overflow: hidden;
+}
+
+.mission-card:hover { background: rgba(74,127,165,0.05); }
+.mission-card::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: 2px;
+  background: var(--pro-accent);
+  transform: scaleY(0);
+  transform-origin: top;
+  transition: transform 0.4s ease;
+}
+.mission-card:hover::before { transform: scaleY(1); }
+
+.mission-id {
+  font-family: var(--pro-font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.3em;
+  color: var(--pro-accent);
+  margin-bottom: 0.4rem;
+}
+
+.mission-status {
+  display: inline-block;
+  font-family: var(--pro-font-mono);
+  font-size: 0.45rem;
+  letter-spacing: 0.2em;
+  padding: 2px 6px;
+  border: 1px solid;
+  margin-bottom: 1rem;
+}
+.status-active { color: #4a9a65; border-color: #4a9a65; }
+.status-ongoing { color: var(--pro-accent); border-color: var(--pro-accent); }
+.status-archived { color: var(--pro-text-dim); border-color: var(--pro-text-dim); }
+
+.mission-title {
+  font-family: var(--pro-font-mono);
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: var(--pro-text-bright);
+  letter-spacing: 0.05em;
+  line-height: 1.4;
+  margin-bottom: 1rem;
+  text-transform: uppercase;
+}
+
+.mission-desc {
+  font-size: 0.8rem;
+  line-height: 1.7;
+  color: var(--pro-text);
+  font-weight: 300;
+  margin-bottom: 1.5rem;
+}
+
+.mission-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+.mission-tag {
+  font-family: var(--pro-font-mono);
+  font-size: 0.45rem;
+  letter-spacing: 0.2em;
+  color: var(--pro-purple);
+  border: 1px solid rgba(123,111,168,0.25);
+  padding: 2px 6px;
+}
+
+.mission-card-footer {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--pro-font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.2em;
+  color: var(--pro-text-dim);
+  border-top: 1px solid var(--pro-border);
+  padding-top: 1rem;
+}
+
+/* PRO SYSTEMS */
+.systems-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1px;
+  background: var(--pro-border);
+  border: 1px solid var(--pro-border);
+}
+
+.system-panel {
+  background: var(--pro-bg);
+  padding: 2rem;
+}
+
+.system-panel-header {
+  font-family: var(--pro-font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.3em;
+  color: var(--pro-accent);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.8rem;
+  border-bottom: 1px solid var(--pro-border);
+  text-transform: uppercase;
+}
+
+.skill-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 0.5rem 0;
+  border-bottom: 1px solid rgba(74,127,165,0.06);
+  font-family: var(--pro-font-mono);
+  font-size: 0.6rem;
+  letter-spacing: 0.08em;
+  color: var(--pro-text);
+}
+.skill-item:last-child { border-bottom: none; }
+.skill-level {
+  display: flex;
+  gap: 3px;
+}
+.skill-dot {
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  border: 1px solid var(--pro-accent);
+}
+.skill-dot.filled { background: var(--pro-accent); }
+
+/* PRO CONTACT */
+.transmission-panel {
+  max-width: 600px;
+  border: 1px solid var(--pro-border);
+  background: var(--pro-surface);
+  padding: 3rem;
+  position: relative;
+}
+.transmission-panel::before {
+  content: 'OPEN CHANNEL / AWAITING RESPONSE';
+  position: absolute;
+  top: -0.7rem;
+  left: 1.5rem;
+  font-family: var(--pro-font-mono);
+  font-size: 0.5rem;
+  letter-spacing: 0.3em;
+  color: var(--pro-accent);
+  background: var(--pro-surface);
+  padding: 0 0.5rem;
+}
+
+.transmission-blurb {
+  font-size: 0.85rem;
+  line-height: 1.8;
+  color: var(--pro-text);
+  margin-bottom: 2.5rem;
+  font-weight: 300;
+}
+
+.contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.contact-link {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  text-decoration: none;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--pro-border);
+  color: var(--pro-text);
+  transition: all 0.3s;
+  font-family: var(--pro-font-mono);
+  font-size: 0.7rem;
+}
+.contact-link:hover {
+  border-color: var(--pro-accent);
+  color: var(--pro-accent);
+  background: rgba(74,127,165,0.05);
+}
+.contact-link-label {
+  font-size: 0.5rem;
+  letter-spacing: 0.3em;
+  color: var(--pro-text-dim);
+  min-width: 80px;
+}
+
+/* ===== PERSONAL SIDE ===== */
+
+/* PER HERO */
+.per-hero {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 0 3rem;
+  position: relative;
+  overflow: hidden;
+  background: radial-gradient(ellipse at 30% 60%, rgba(143,168,136,0.06) 0%, transparent 60%),
+              radial-gradient(ellipse at 80% 20%, rgba(123,163,176,0.05) 0%, transparent 60%);
+}
+
+.per-hero-epigraph {
+  font-family: var(--per-font-body);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--per-text-dim);
+  margin-bottom: 3rem;
+  max-width: 420px;
+  line-height: 1.6;
+}
+
+.per-hero-title {
+  font-family: var(--per-font-serif);
+  font-size: clamp(2.5rem, 6vw, 5.5rem);
+  font-weight: 400;
+  line-height: 1.0;
+  color: var(--per-text-bright);
+  margin-bottom: 0.5rem;
+}
+.per-hero-title em { font-style: italic; color: var(--per-accent); }
+
+.per-hero-sub {
+  font-family: var(--per-font-body);
+  font-size: 1.05rem;
+  color: var(--per-text-dim);
+  letter-spacing: 0.08em;
+  margin-top: 1rem;
+  font-style: italic;
+}
+
+.per-hero-body {
+  max-width: 520px;
+  margin-top: 3rem;
+  font-family: var(--per-font-body);
+  font-size: 1.05rem;
+  line-height: 1.9;
+  color: var(--per-text);
+  border-left: 1px solid var(--per-border);
+  padding-left: 1.5rem;
+}
+
+.per-warm-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(to right, transparent, var(--per-accent), transparent);
+  opacity: 0.3;
+}
+
+/* PER SECTION COMMON */
+.per-section {
+  padding: 6rem 3rem;
+  border-top: 1px solid var(--per-border);
+}
+
+.per-section-header {
+  display: flex;
+  align-items: baseline;
+  gap: 2rem;
+  margin-bottom: 4rem;
+}
+
+.per-section-tag {
+  font-family: var(--per-font-body);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--per-accent);
+}
+
+.per-section-title {
+  font-family: var(--per-font-serif);
+  font-size: clamp(1.2rem, 3vw, 2rem);
+  font-weight: 400;
+  color: var(--per-text-bright);
+}
+
+.per-section-line {
+  flex: 1;
+  height: 1px;
+  background: var(--per-border);
+}
+
+/* CINEMA ARCHIVE */
+.film-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+.film-entry {
+  display: flex;
+  flex-direction: column;
+  gap: 1.8rem;
+  padding: 3rem 0;
+  border-bottom: 1px solid var(--per-border);
+}
+.film-entry:first-child { border-top: 1px solid var(--per-border); }
+
+.film-poster-placeholder {
+  aspect-ratio: 2/3;
+  background: var(--per-surface);
+  border: 1px solid var(--per-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--per-font-body);
+  font-style: italic;
+  font-size: 0.75rem;
+  color: var(--per-text-dim);
+  text-align: center;
+  padding: 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.film-poster-placeholder::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.03) 100%);
+}
+
+.film-year-badge {
+  position: absolute;
+  bottom: 0.5rem;
+  right: 0.5rem;
+  font-family: 'EB Garamond', serif;
+  font-size: 0.7rem;
+  color: var(--per-text-dim);
+  border: 1px solid var(--per-border);
+  padding: 2px 6px;
+  background: var(--per-bg);
+}
+
+.film-poster-wrap {
+  width: 100%;
+  aspect-ratio: 16/7;
+  border: 1px solid var(--per-border);
+  overflow: hidden;
+  position: relative;
+}
+.film-poster-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  display: block;
+  filter: saturate(0.78) brightness(0.82);
+  transition: filter 0.6s ease;
+}
+.film-entry:hover .film-poster-wrap img {
+  filter: saturate(0.95) brightness(0.95);
+}
+
+.film-content {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  opacity: 1;
+}
+
+.film-title {
+  font-family: var(--per-font-serif);
+  font-size: 1.6rem;
+  font-weight: 400;
+  color: var(--per-text-bright);
+  margin-bottom: 0.3rem;
+}
+
+.film-meta {
+  font-family: var(--per-font-body);
+  font-size: 0.8rem;
+  font-style: italic;
+  color: var(--per-text-dim);
+  margin-bottom: 1.5rem;
+  letter-spacing: 0.05em;
+}
+
+.film-interpretation {
+  font-family: var(--per-font-body);
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--per-text);
+  margin-bottom: 1.5rem;
+}
+.film-interpretation p { margin-bottom: 1rem; }
+.film-interpretation em { color: var(--per-accent); }
+
+.film-quote {
+  font-family: var(--per-font-serif);
+  font-style: italic;
+  font-size: 1.15rem;
+  color: var(--per-text-dim);
+  border-left: 2px solid var(--per-accent);
+  padding-left: 1.2rem;
+  margin: 1.5rem 0;
+  line-height: 1.7;
+}
+
+.film-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+.film-tag {
+  font-family: var(--per-font-body);
+  font-style: italic;
+  font-size: 0.75rem;
+  color: var(--per-text-dim);
+  border: 1px solid var(--per-border);
+  padding: 2px 10px;
+  border-radius: 20px;
+}
+
+/* SOUND DOCUMENTS */
+.album-entries {
+  display: flex;
+  flex-direction: column;
+  gap: 4rem;
+}
+
+.album-entry {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 3rem;
+  align-items: start;
+}
+
+.album-cover-placeholder {
+  width: 180px;
+  aspect-ratio: 1;
+  background: var(--per-surface);
+  border: 1px solid var(--per-border);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--per-font-serif);
+  font-style: italic;
+  font-size: 0.8rem;
+  color: var(--per-text-dim);
+  text-align: center;
+  padding: 1rem;
+}
+
+.album-title {
+  font-family: var(--per-font-serif);
+  font-size: 1.6rem;
+  font-weight: 400;
+  font-style: italic;
+  color: var(--per-text-bright);
+  margin-bottom: 0.2rem;
+}
+
+.album-artist {
+  font-family: var(--per-font-body);
+  font-size: 0.85rem;
+  color: var(--per-text-dim);
+  letter-spacing: 0.1em;
+  margin-bottom: 1.5rem;
+}
+
+.album-interpretation {
+  font-family: var(--per-font-body);
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--per-text);
+}
+.album-interpretation p { margin-bottom: 1rem; }
+.album-interpretation em { color: var(--per-blue); }
+
+.album-mood-line {
+  margin-top: 1.5rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--per-border);
+  background: rgba(143,168,136,0.04);
+  font-family: var(--per-font-serif);
+  font-style: italic;
+  font-size: 1rem;
+  color: var(--per-text-dim);
+  line-height: 1.6;
+}
+
+/* FIELD NOTES */
+.notes-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 2rem;
+}
+
+.note-card {
+  border: 1px solid var(--per-border);
+  padding: 2.5rem;
+  background: rgba(143,168,136,0.03);
+  position: relative;
+}
+
+.note-date {
+  font-family: var(--per-font-body);
+  font-style: italic;
+  font-size: 0.75rem;
+  color: var(--per-text-dim);
+  margin-bottom: 1.2rem;
+}
+
+.note-title {
+  font-family: var(--per-font-serif);
+  font-size: 1.2rem;
+  font-weight: 400;
+  color: var(--per-text-bright);
+  margin-bottom: 1.2rem;
+}
+
+.note-body {
+  font-family: var(--per-font-body);
+  font-size: 1rem;
+  line-height: 1.85;
+  color: var(--per-text);
+}
+.note-body p { margin-bottom: 0.8rem; }
+.note-body p:last-child { margin-bottom: 0; }
+.note-body em { color: var(--per-accent); }
+
+/* PERSONAL CONTACT */
+.per-contact-wrap {
+  max-width: 500px;
+}
+
+.per-contact-text {
+  font-family: var(--per-font-body);
+  font-size: 1.05rem;
+  line-height: 1.85;
+  color: var(--per-text);
+  margin-bottom: 2.5rem;
+}
+
+.per-contact-links {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+
+.per-contact-link {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  text-decoration: none;
+  color: var(--per-text);
+  font-family: var(--per-font-body);
+  font-size: 1rem;
+  padding: 0.8rem 0;
+  border-bottom: 1px solid var(--per-border);
+  transition: color 0.3s;
+}
+.per-contact-link:hover { color: var(--per-accent); }
+.per-contact-link-label {
+  font-style: italic;
+  font-size: 0.8rem;
+  color: var(--per-text-dim);
+  min-width: 80px;
+}
+
+/* FOOTER */
+.site-footer {
+  padding: 3rem;
+  border-top: 1px solid var(--pro-border);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: var(--pro-font-mono);
+  font-size: 0.55rem;
+  letter-spacing: 0.2em;
+  color: var(--pro-text-dim);
+  transition: border-color 0.8s;
+}
+body.personal .site-footer {
+  border-top-color: var(--per-border);
+  font-family: 'EB Garamond', serif;
+  font-size: 0.75rem;
+  letter-spacing: 0.05em;
+  color: var(--per-text-dim);
+}
+
+/* GLOW PULSE ANIMATION */
+@keyframes glow-pulse {
+  0%, 100% { box-shadow: 0 0 20px rgba(74,127,165,0.05); }
+  50% { box-shadow: 0 0 40px rgba(74,127,165,0.12); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .pro-hero, .per-hero, .pro-section, .per-section { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .pro-about-grid { grid-template-columns: 1fr; }
+  .systems-grid { grid-template-columns: 1fr; }
+  .film-entry { grid-template-columns: 1fr; }
+  .film-poster-placeholder { aspect-ratio: 16/9; }
+  .album-entry { grid-template-columns: 1fr; }
+  .album-cover-placeholder { width: 100%; aspect-ratio: 1; max-width: 180px; }
+  #identity-nav { padding: 0 1.5rem; }
+}
+
+/* FADE IN */
+.fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.7s ease, transform 0.7s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+</style>
+</head>
+<body>
+
+<!-- PARTICLE CANVAS -->
+<canvas id="particles-canvas"></canvas>
+
+<!-- AURORA WARP STREAK (pro side only) -->
+<div id="aurora-bg"></div>
+
+<!-- SAGITTARIUS CONSTELLATION — star positions derived from RA/Dec catalog data -->
+<svg id="sagittarius-constellation" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 500 350" aria-hidden="true">
+  <defs>
+    <filter id="sgr-glow" x="-200%" y="-200%" width="500%" height="500%">
+      <feGaussianBlur stdDeviation="2.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+    <filter id="sgr-glow-bright" x="-300%" y="-300%" width="700%" height="700%">
+      <feGaussianBlur stdDeviation="4.5" result="blur"/>
+      <feMerge><feMergeNode in="blur"/><feMergeNode in="SourceGraphic"/></feMerge>
+    </filter>
+  </defs>
+
+  <!-- Constellation stick lines -->
+  <g stroke="#9ab8d4" stroke-width="0.55" fill="none" stroke-linecap="round" stroke-opacity="0.10">
+    <line x1="52"  y1="98"  x2="182" y2="132"/><!-- γ Nash → δ Kaus Media -->
+    <line x1="182" y1="132" x2="172" y2="32" /><!-- δ → λ Kaus Borealis -->
+    <line x1="172" y1="32"  x2="298" y2="82" /><!-- λ → φ Phi -->
+    <line x1="298" y1="82"  x2="368" y2="44" /><!-- φ → σ Nunki -->
+    <line x1="368" y1="44"  x2="418" y2="132"/><!-- σ → τ Tau -->
+    <line x1="418" y1="132" x2="352" y2="202"/><!-- τ → ζ Ascella -->
+    <line x1="352" y1="202" x2="208" y2="288"/><!-- ζ → ε Kaus Australis -->
+    <line x1="208" y1="288" x2="182" y2="132"/><!-- ε → δ Kaus Media -->
+    <line x1="182" y1="132" x2="352" y2="202"/><!-- δ → ζ (body cross) -->
+  </g>
+
+  <!-- Faint field stars (no lines, just ambient depth) -->
+  <g fill="white" fill-opacity="0.07">
+    <circle cx="115" cy="52"  r="0.9"/>
+    <circle cx="238" cy="44"  r="0.7"/>
+    <circle cx="448" cy="88"  r="0.9"/>
+    <circle cx="88"  cy="205" r="0.7"/>
+    <circle cx="442" cy="262" r="0.9"/>
+    <circle cx="308" cy="192" r="0.7"/>
+    <circle cx="138" cy="318" r="0.9"/>
+    <circle cx="472" cy="190" r="0.7"/>
+    <circle cx="62"  cy="155" r="0.7"/>
+    <circle cx="260" cy="225" r="0.7"/>
+  </g>
+
+  <!-- Named stars — sized by visual magnitude, individually timed twinkle -->
+
+  <!-- γ Sgr  Nash          mag 2.98  — spout tip -->
+  <circle class="sgr-star" cx="52"  cy="98"  r="1.8"
+    fill="white" fill-opacity="0.22"
+    filter="url(#sgr-glow)"
+    style="animation-delay:0s; animation-duration:4.4s"/>
+
+  <!-- λ Sgr  Kaus Borealis mag 2.82  — lid -->
+  <circle class="sgr-star" cx="172" cy="32"  r="1.9"
+    fill="#cce0f5" fill-opacity="0.24"
+    filter="url(#sgr-glow)"
+    style="animation-delay:1.2s; animation-duration:5.1s"/>
+
+  <!-- δ Sgr  Kaus Media    mag 2.72  — bow center -->
+  <circle class="sgr-star" cx="182" cy="132" r="2.0"
+    fill="#cce0f5" fill-opacity="0.26"
+    filter="url(#sgr-glow)"
+    style="animation-delay:0.6s; animation-duration:4.8s"/>
+
+  <!-- ε Sgr  Kaus Australis mag 1.80 — BRIGHTEST, teapot base -->
+  <circle class="sgr-star-bright" cx="208" cy="288" r="3.2"
+    fill="white" fill-opacity="0.38"
+    filter="url(#sgr-glow-bright)"
+    style="animation-delay:2.2s; animation-duration:6.0s"/>
+
+  <!-- φ Sgr  Phi            mag 3.17  — upper body -->
+  <circle class="sgr-star" cx="298" cy="82"  r="1.5"
+    fill="#cce0f5" fill-opacity="0.18"
+    filter="url(#sgr-glow)"
+    style="animation-delay:0.9s; animation-duration:5.4s"/>
+
+  <!-- σ Sgr  Nunki          mag 2.02  — handle top, 2nd brightest -->
+  <circle class="sgr-star-bright" cx="368" cy="44"  r="2.6"
+    fill="white" fill-opacity="0.32"
+    filter="url(#sgr-glow-bright)"
+    style="animation-delay:1.8s; animation-duration:5.7s"/>
+
+  <!-- τ Sgr  Tau            mag 3.32  — handle bend -->
+  <circle class="sgr-star" cx="418" cy="132" r="1.5"
+    fill="#cce0f5" fill-opacity="0.17"
+    filter="url(#sgr-glow)"
+    style="animation-delay:3.1s; animation-duration:4.6s"/>
+
+  <!-- ζ Sgr  Ascella        mag 2.60  — right body -->
+  <circle class="sgr-star" cx="352" cy="202" r="2.0"
+    fill="#cce0f5" fill-opacity="0.25"
+    filter="url(#sgr-glow)"
+    style="animation-delay:1.5s; animation-duration:5.2s"/>
+
+  <!-- tiny archive label -->
+  <text x="500" y="348" text-anchor="end"
+    font-family="'Space Mono', monospace" font-size="6"
+    fill="#4a7fa5" fill-opacity="0.25" letter-spacing="2">SGR / ♐ / CATALOG-IAU</text>
+</svg>
+
+<!-- IDENTITY NAV -->
+<nav id="identity-nav">
+  <div class="nav-logo">
+    <span class="nav-id-label">ARCHIVE ID</span>
+    <span class="nav-id-name">SZ / 2024-UNIT01</span>
+  </div>
+  <div class="identity-switch">
+    <button class="switch-btn active" id="btn-pro" onclick="setIdentity('pro')">ENGINEER</button>
+    <div class="switch-divider"></div>
+    <button class="switch-btn" id="btn-per" onclick="setIdentity('per')">HUMAN</button>
+  </div>
+</nav>
+
+<!-- ===================== PROFESSIONAL SIDE ===================== -->
+<div id="pro-side">
+
+  <!-- HERO -->
+  <section class="pro-hero">
+    <div class="hero-grid-lines"></div>
+    <div class="hero-corner-brackets"></div>
+    <div class="hero-red-glow"></div>
+    <div class="hero-red-sparkles"></div>
+
+    <div class="pro-hero-meta fade-in">
+      <div class="meta-item">
+        <span class="meta-label">ARCHIVE ID</span>
+        <span class="meta-value">SZ-2024-UNIT01</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">CLASSIFICATION</span>
+        <span class="meta-value">CHEMICAL ENGINEERING / YEAR I</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">STATUS</span>
+        <span class="meta-value" style="color: #4a9a65;">◉ ACTIVE / IN PROGRESS</span>
+      </div>
+      <div class="meta-item">
+        <span class="meta-label">LAST UPDATED</span>
+        <span class="meta-value">2026.05.18</span>
+      </div>
+    </div>
+
+    <div class="pro-hero-name fade-in" style="transition-delay: 0.15s">
+      SHREYAS<br>ZEESHAN
+      <span>ENGINEER IN FORMATION</span>
+    </div>
+
+    <div class="pro-hero-mission fade-in" style="transition-delay: 0.3s">
+      I am trying to understand <em>systems</em> — how molecules behave under pressure,
+      how thermodynamic laws govern possibility, how the invisible architecture of chemistry
+      shapes everything we can build and become.<br><br>
+      This archive documents the beginning. The curiosity is real.
+      The ambition is patient. The work has only started.
+    </div>
+
+    <div class="hero-scroll-indicator">SCROLL TO EXPLORE ARCHIVE</div>
+  </section>
+
+  <!-- ABOUT -->
+  <section class="pro-section fade-in">
+    <div class="section-header">
+      <span class="section-tag">FILE 001 /</span>
+      <h2 class="section-title">SUBJECT PROFILE</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="pro-about-grid">
+      <div class="about-philosophy">
+        <p>I am a first-year chemical engineering student at the beginning of what I intend to be a long, deeply considered career in applied science and systems research. I do not yet have a long list of completed projects or published papers. What I have is direction — a clear sense of the kind of engineer I am trying to become and a commitment to the process of getting there.</p>
+
+        <p><strong>My interest is in environmental and biochemical systems</strong> — specifically in how engineering can address resource scarcity, climate instability, and the chemical boundaries of sustainable infrastructure. I am drawn to the intersection of thermodynamics, fluid mechanics, and computational modeling, not because these fields are glamorous, but because they represent the most honest tools for understanding how matter and energy actually behave.</p>
+
+        <p>I think slowly, work carefully, and believe that being a student is not a lesser state — it is the condition of honest inquiry. Every concept I encounter feels like a door that opens into a larger room. <strong>I am not in a hurry to stop being amazed by it.</strong></p>
+
+        <p>This archive is not a résumé. It is a document of becoming.</p>
+      </div>
+
+      <div class="about-specs">
+        <div class="spec-row">
+          <span class="spec-key">INSTITUTION</span>
+          <span class="spec-val">Chemical Engineering / Year I</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">CORE INTEREST</span>
+          <span class="spec-val">Environmental & Biochemical Systems</span>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">THERMODYNAMICS</span>
+          <div>
+            <div class="spec-bar"><div class="spec-bar-fill" style="width: 75%"></div></div>
+          </div>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">FLUID MECHANICS</span>
+          <div>
+            <div class="spec-bar"><div class="spec-bar-fill" style="width: 60%"></div></div>
+          </div>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">COMPUTATIONAL TOOLS</span>
+          <div>
+            <div class="spec-bar"><div class="spec-bar-fill" style="width: 55%"></div></div>
+          </div>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">RESEARCH ORIENTATION</span>
+          <div>
+            <div class="spec-bar"><div class="spec-bar-fill" style="width: 80%"></div></div>
+          </div>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">CURIOSITY INDEX</span>
+          <div>
+            <div class="spec-bar"><div class="spec-bar-fill" style="width: 100%"></div></div>
+          </div>
+        </div>
+        <div class="spec-row">
+          <span class="spec-key">REVISION</span>
+          <span class="spec-val" style="color: var(--pro-accent)">v1.0.4 — ONGOING</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJECTS -->
+  <section class="pro-section fade-in">
+    <div class="section-header">
+      <span class="section-tag">FILE 002 /</span>
+      <h2 class="section-title">RESEARCH ARCHIVE</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="projects-grid">
+      <div class="mission-card">
+        <div class="mission-id">MISSION-ID: ENV-SYS-001 / REV 1.2</div>
+        <div class="mission-status status-active">● ACTIVE</div>
+        <div class="mission-title">Atmospheric Carbon<br>Sequestration Model</div>
+        <div class="mission-desc">
+          A conceptual modeling study examining the thermodynamic feasibility of
+          direct air capture methods at varying ambient conditions. Focuses on
+          entropy generation, sorbent regeneration cycles, and energetic cost
+          per tonne CO₂ removed under realistic boundary conditions.
+        </div>
+        <div class="mission-tags">
+          <span class="mission-tag">THERMODYNAMICS</span>
+          <span class="mission-tag">ENVIRONMENTAL</span>
+          <span class="mission-tag">MASS TRANSFER</span>
+          <span class="mission-tag">MODELING</span>
+        </div>
+        <div class="mission-card-footer">
+          <span>INITIATED: 2025.09</span>
+          <span>SYS: ENV-001 ↗</span>
+        </div>
+      </div>
+
+      <div class="mission-card">
+        <div class="mission-id">MISSION-ID: BIOCHEM-002 / REV 0.8</div>
+        <div class="mission-status status-ongoing">◐ IN PROGRESS</div>
+        <div class="mission-title">Membrane Filtration<br>Efficiency Study</div>
+        <div class="mission-desc">
+          Experimental and computational investigation into the relationship
+          between membrane pore geometry and selective permeability in aqueous
+          solutions. Examining fouling mechanisms, pressure drop profiles,
+          and flux degradation over extended operation cycles.
+        </div>
+        <div class="mission-tags">
+          <span class="mission-tag">FLUID MECHANICS</span>
+          <span class="mission-tag">BIOCHEMICAL</span>
+          <span class="mission-tag">MEMBRANE TECH</span>
+        </div>
+        <div class="mission-card-footer">
+          <span>INITIATED: 2025.11</span>
+          <span>SYS: BIOCHEM-002 ↗</span>
+        </div>
+      </div>
+
+      <div class="mission-card">
+        <div class="mission-id">MISSION-ID: THERMO-003 / REV 2.0</div>
+        <div class="mission-status status-active">● ACTIVE</div>
+        <div class="mission-title">Phase Transition<br>Thermodynamics</div>
+        <div class="mission-desc">
+          Analysis of solid-liquid-vapor equilibria in multicomponent systems
+          under non-standard pressure and temperature regimes. Using
+          Gibbs free energy minimization and NRTL activity coefficient models
+          to predict phase behavior with practical engineering accuracy.
+        </div>
+        <div class="mission-tags">
+          <span class="mission-tag">THERMODYNAMICS</span>
+          <span class="mission-tag">PHASE EQUILIBRIA</span>
+          <span class="mission-tag">COMPUTATIONAL</span>
+        </div>
+        <div class="mission-card-footer">
+          <span>INITIATED: 2025.10</span>
+          <span>SYS: THERMO-003 ↗</span>
+        </div>
+      </div>
+
+      <div class="mission-card">
+        <div class="mission-id">MISSION-ID: COMP-004 / REV 0.5</div>
+        <div class="mission-status status-ongoing">◐ IN PROGRESS</div>
+        <div class="mission-title">CFD Reactor<br>Optimization</div>
+        <div class="mission-desc">
+          Early-stage computational fluid dynamics study of flow distribution
+          and residence time in tubular reactor configurations. Investigating
+          how geometric parameters influence conversion efficiency using
+          Python-based numerical solvers and OpenFOAM mesh analysis.
+        </div>
+        <div class="mission-tags">
+          <span class="mission-tag">CFD</span>
+          <span class="mission-tag">REACTOR DESIGN</span>
+          <span class="mission-tag">PYTHON</span>
+          <span class="mission-tag">NUMERICAL</span>
+        </div>
+        <div class="mission-card-footer">
+          <span>INITIATED: 2026.01</span>
+          <span>SYS: COMP-004 ↗</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- SYSTEMS / SKILLS -->
+  <section class="pro-section fade-in">
+    <div class="section-header">
+      <span class="section-tag">FILE 003 /</span>
+      <h2 class="section-title">SYSTEMS INVENTORY</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="systems-grid">
+      <div class="system-panel">
+        <div class="system-panel-header">ENGINEERING CORE</div>
+        <div class="skill-item">
+          <span>Thermodynamics</span>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+            <div class="skill-dot"></div>
+          </div>
+        </div>
+        <div class="skill-item">
+          <span>Fluid Mechanics</span>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+            <div class="skill-dot filled"></div><div class="skill-dot"></div>
+            <div class="skill-dot"></div>
+          </div>
+        </div>
+        <div class="skill-item">
+          <span>Mass Transfer</span>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+            <div class="skill-dot filled"></div><div class="skill-dot"></div>
+            <div class="skill-dot"></div>
+          </div>
+        </div>
+        <div class="skill-item">
+          <span>Reaction Engineering</span>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+            <div class="skill-dot"></div><div class="skill-dot"></div>
+            <div class="skill-dot"></div>
+          </div>
+        </div>
+        <div class="skill-item">
+          <span>Process Design</span>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+            <div class="skill-dot"></div><div class="skill-dot"></div>
+            <div class="skill-dot"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="system-panel">
+        <div class="system-panel-header">COMPUTATIONAL TOOLS</div>
+        <div class="skill-item">
+          <span>Python</span>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+            <div class="skill-dot filled"></div><div class="skill-dot"></div>
+            <div class="skill-dot"></div>
+          </div>
+        </div>
+        <div class="skill-item">
+          <span>MATLAB</span>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+            <div class="skill-dot"></div><div class="skill-dot"></div>
+            <div class="skill-dot"></div>
+          </div>
+        </div>
+        <div class="skill-item">
+          <span>Aspen Plus</span>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot"></div>
+            <div class="skill-dot"></div><div class="skill-dot"></div>
+            <div class="skill-dot"></div>
+          </div>
+        </div>
+        <div class="skill-item">
+          <span>Data Analysis</span>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+            <div class="skill-dot filled"></div><div class="skill-dot"></div>
+            <div class="skill-dot"></div>
+          </div>
+        </div>
+        <div class="skill-item">
+          <span>LaTeX / Technical Writing</span>
+          <div class="skill-level">
+            <div class="skill-dot filled"></div><div class="skill-dot filled"></div>
+            <div class="skill-dot filled"></div><div class="skill-dot"></div>
+            <div class="skill-dot"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="system-panel">
+        <div class="system-panel-header">RESEARCH ORIENTATION</div>
+        <div class="skill-item"><span>Environmental Systems</span><span style="color:var(--pro-accent);font-size:0.55rem">PRIMARY</span></div>
+        <div class="skill-item"><span>Biochemical Engineering</span><span style="color:var(--pro-accent);font-size:0.55rem">PRIMARY</span></div>
+        <div class="skill-item"><span>Computational Modeling</span><span style="color:var(--pro-purple);font-size:0.55rem">SECONDARY</span></div>
+        <div class="skill-item"><span>Sustainable Infrastructure</span><span style="color:var(--pro-purple);font-size:0.55rem">SECONDARY</span></div>
+        <div class="skill-item"><span>Systems Thinking</span><span style="color:#4a9a65;font-size:0.55rem">INTEGRATED</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONTACT -->
+  <section class="pro-section fade-in">
+    <div class="section-header">
+      <span class="section-tag">FILE 004 /</span>
+      <h2 class="section-title">TRANSMISSION LOG</h2>
+      <div class="section-line"></div>
+    </div>
+
+    <div class="transmission-panel">
+      <p class="transmission-blurb">
+        If you are a researcher, a fellow student, or someone who finds something
+        in this archive worth talking about — I am open to correspondence.
+        The channel is simple. The interest is genuine.
+      </p>
+      <div class="contact-links">
+        <a href="mailto:shreyas@example.com" class="contact-link">
+          <span class="contact-link-label">EMAIL</span>
+          <span>shreyas@example.com</span>
+        </a>
+        <a href="#" class="contact-link">
+          <span class="contact-link-label">LINKEDIN</span>
+          <span>linkedin.com/in/shreyaszeeshan</span>
+        </a>
+        <a href="#" class="contact-link">
+          <span class="contact-link-label">GITHUB</span>
+          <span>github.com/shreyaszeeshan</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer">
+    <span>ARCHIVE: SZ-2024-UNIT01 / ALL SYSTEMS OPERATIONAL</span>
+    <span>SHREYAS ZEESHAN © 2026</span>
+  </footer>
+
+</div><!-- /pro-side -->
+
+
+<!-- ===================== PERSONAL SIDE ===================== -->
+<div id="personal-side">
+
+  <!-- HERO -->
+  <section class="per-hero">
+    <div class="per-hero-epigraph">
+      "Every atom in your body came from a star that exploded.<br>
+      You are stardust. You are alive."
+    </div>
+
+    <div class="per-hero-title fade-in">
+      Elsewhere —<br>
+      <em>the human side</em>
+    </div>
+
+    <div class="per-hero-sub fade-in" style="transition-delay:0.15s">
+      shreyaszeeshan / personal archive
+    </div>
+
+    <div class="per-hero-body fade-in" style="transition-delay:0.3s">
+      The person behind the equations is just as interested in how stories feel
+      as in how systems work. This space belongs to that person —
+      the one who watches films twice to understand them, who finds music
+      terrifying in its accuracy, and who takes long walks
+      to think about nothing in particular.
+    </div>
+
+    <div class="per-warm-line"></div>
+  </section>
+
+  <!-- CINEMA ARCHIVE -->
+  <section class="per-section fade-in">
+    <div class="per-section-header">
+      <span class="per-section-tag">archive i /</span>
+      <h2 class="per-section-title">Cinema</h2>
+      <div class="per-section-line"></div>
+    </div>
+
+    <div class="film-entries">
+
+      <!-- FILM 1: Project Hail Mary -->
+      <div class="film-entry">
+        <div class="film-poster-wrap">
+          <img src="images/project-hail-mary.jpg" alt="Project Hail Mary" style="object-position: center 30%"/>
+        </div>
+        <div class="film-content">
+          <h3 class="film-title">Project Hail Mary</h3>
+          <div class="film-meta">dir. Drew Goddard · 2025 · science fiction</div>
+          <div class="film-interpretation">
+            <p>We are in an era where AI and CGI are everywhere and obvious — you can see the seams in almost every film being made right now. Which is exactly why this one hit differently. The people behind Project Hail Mary chose to do it the old way. Real lighting. Real camerawork. Practical effects. The kind of craft that has no shortcut. And the result is one of the most genuinely beautiful films I have seen — not because of what it shows you, but because of how honestly it was made.</p>
+            <p>But the craft is almost secondary to what the film is really about. The friendship between Grace and Rocky — a human and an alien trying to understand each other across the most profound possible barrier — is one of the most moving things I have encountered in cinema. And the moment Grace chooses to stay rather than go back to Earth... <em>that was it for me.</em> That was the scene. He didn't go back. He stayed.</p>
+            <p>I see something of myself in Grace. He wanted to teach. He ended up doing something much larger, almost by accident, just by showing up and being curious. I don't know if I'll ever be that, but I understand the impulse completely.</p>
+          </div>
+          <div class="film-quote">
+            He didn't go back. He stayed.<br>
+            <span style="font-size:0.85rem;opacity:0.6">— the whole film, in four words.</span>
+          </div>
+          <div class="film-tags">
+            <span class="film-tag">practical filmmaking</span>
+            <span class="film-tag">friendship</span>
+            <span class="film-tag">sacrifice</span>
+            <span class="film-tag">curiosity</span>
+            <span class="film-tag">teaching</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILM 2: 500 Days of Summer -->
+      <div class="film-entry">
+        <div class="film-poster-wrap">
+          <img src="images/500-days.jpg" alt="500 Days of Summer" style="object-position: center top"/>
+        </div>
+        <div class="film-content">
+          <h3 class="film-title">500 Days of Summer</h3>
+          <div class="film-meta">dir. Marc Webb · 2009 · romantic drama</div>
+          <div class="film-interpretation">
+            <p>Most films about expectation versus reality just tell you the idea. They show you the disappointment after the fact and you understand it intellectually. This one literally split the screen in two and showed you both at the same time. Left side: what Tom imagined. Right side: what actually happened. You watch them play out simultaneously and the gap between them is almost unbearable.</p>
+            <p><em>That choice made the film.</em> Not just cool — necessary. Because that is exactly how disappointment works. You don't experience it as a clean before-and-after. You experience it while the expectation is still running, while the version you wanted is still visible right there, next to the version that's actually happening.</p>
+            <p>Very relatable. Too relatable, honestly.</p>
+          </div>
+          <div class="film-quote">
+            "I just... I just woke up one day and I knew."<br>
+            <span style="font-size:0.85rem;opacity:0.6">— the most honest and most devastating sentence in the film.</span>
+          </div>
+          <div class="film-tags">
+            <span class="film-tag">expectations</span>
+            <span class="film-tag">split screen</span>
+            <span class="film-tag">non-linear</span>
+            <span class="film-tag">relatable</span>
+            <span class="film-tag">editing as emotion</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILM 3: The Wild Robot -->
+      <div class="film-entry">
+        <div class="film-poster-wrap">
+          <img src="images/wild-robot.jpg" alt="The Wild Robot" style="object-position: center 40%"/>
+        </div>
+        <div class="film-content">
+          <h3 class="film-title">The Wild Robot</h3>
+          <div class="film-meta">dir. Chris Sanders · 2024 · animated</div>
+          <div class="film-interpretation">
+            <p>This is the film I want to keep at my core as an engineer. Forever.</p>
+            <p>Roz is a robot. She's programmed. She operates exactly as she was designed to. And then the island forces her to encounter something no program can prepare you for — a world that does not care about your directives. She has to learn nature. Not to control it. Not to optimize it. Just to understand it well enough to stop getting in its way.</p>
+            <p>The moment that broke me was when she has to let Brightbill go with the other geese — even though she wants to protect him, even though everything in her programming says stay close, keep safe. She has to let nature take its toll. <em>She must literally learn nature in order to help nature.</em> That is the whole film. And I think it is also the whole challenge of engineering done right.</p>
+            <p>This speaks to exactly where we are going in the world right now. We build systems. We optimize. We push. And sometimes we need to stop and actually assess our goals — whether what we are building is helping, or just imposing. That is the question I want to keep asking my whole career.</p>
+          </div>
+          <div class="film-quote">
+            She learned nature in order to help it.<br>
+            <span style="font-size:0.85rem;opacity:0.6">— the engineering philosophy I want to keep my whole life.</span>
+          </div>
+          <div class="film-tags">
+            <span class="film-tag">engineering philosophy</span>
+            <span class="film-tag">letting go</span>
+            <span class="film-tag">nature</span>
+            <span class="film-tag">adaptation</span>
+            <span class="film-tag">becoming</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILM 4: Guardians of the Galaxy Vol. 3 -->
+      <div class="film-entry">
+        <div class="film-poster-wrap">
+          <img src="images/gotg3.jpg" alt="Guardians of the Galaxy Vol. 3" style="object-position: center 60%"/>
+        </div>
+        <div class="film-content">
+          <h3 class="film-title">Guardians of the Galaxy Vol. 3</h3>
+          <div class="film-meta">dir. James Gunn · 2023 · superhero</div>
+          <div class="film-interpretation">
+            <p>I did not expect this film to do what it did to me.</p>
+            <p>Rocket's scenes — his origin, what was done to him, what he survived — are so heartbreaking that heartbreaking feels like the wrong word. <em>Disgustingly beautiful.</em> That is the only phrase I have for it. The kind of scene that makes you feel almost guilty for being moved, because what is being depicted is so awful, and yet the way it is rendered is so full of love for the character that you cannot look away.</p>
+            <p>And the fact that they were all just there for him. The whole team. Not doing anything heroic — just present. That is the part that got me. Not the action. Not the spectacle. Just the presence of people who decided to show up.</p>
+          </div>
+          <div class="film-quote">
+            Disgustingly beautiful.<br>
+            <span style="font-size:0.85rem;opacity:0.6">— the only words I had for Rocket's arc.</span>
+          </div>
+          <div class="film-tags">
+            <span class="film-tag">found family</span>
+            <span class="film-tag">grief</span>
+            <span class="film-tag">showing up</span>
+            <span class="film-tag">presence</span>
+            <span class="film-tag">heartbreaking</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- FILM 5: Little Women -->
+      <div class="film-entry">
+        <div class="film-poster-wrap">
+          <img src="images/little-women.jpg" alt="Little Women" style="object-position: center center"/>
+        </div>
+        <div class="film-content">
+          <h3 class="film-title">Little Women</h3>
+          <div class="film-meta">dir. Greta Gerwig · 2019 · period drama</div>
+          <div class="film-interpretation">
+            <p>I live with my father, my mother, and three sisters. Of course Little Women matters to me. Of course.</p>
+            <p>But beyond the personal mirror of it — the household full of people with completely different ideas about what a life should look like — what I love about this film is Jo. Her passion. The way she is so completely, almost irrationally driven by the need to make something that belongs to her. There is something I recognize in that urgency even though my version of it looks completely different.</p>
+            <p><em>"Just because my dreams are different doesn't mean they are less important."</em> I think about that line more than I expected to. It is not about writing or engineering specifically. It is about the right to take your own direction seriously — to not need it to look like what everyone else is doing in order for it to count.</p>
+          </div>
+          <div class="film-quote">
+            "Just because my dreams are different doesn't mean they are less important."
+          </div>
+          <div class="film-tags">
+            <span class="film-tag">sisters</span>
+            <span class="film-tag">ambition</span>
+            <span class="film-tag">passion</span>
+            <span class="film-tag">identity</span>
+            <span class="film-tag">home</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- SOUND DOCUMENTS -->
+  <section class="per-section fade-in">
+    <div class="per-section-header">
+      <span class="per-section-tag">archive ii /</span>
+      <h2 class="per-section-title">Sound Documents</h2>
+      <div class="per-section-line"></div>
+    </div>
+
+    <div class="album-entries">
+
+      <!-- MIDNIGHTS -->
+      <div class="album-entry">
+        <div class="album-cover-placeholder">Midnights</div>
+        <div class="album-content">
+          <h3 class="album-title">Midnights</h3>
+          <div class="album-artist">TAYLOR SWIFT · 2022</div>
+          <div class="album-interpretation">
+            <p>People always go to Folklore as the obvious answer when someone asks about Taylor. And Folklore is good — of course it is. But Midnights is where I live. The storytelling here is so deeply, deeply relatable that it almost feels unfair. Like she is writing about something specific and somehow also writing about everything.</p>
+            <p>The production matches the feeling exactly. That is rarer than people think — an album that sounds like what it is about. Midnights sounds like being awake when you shouldn't be. It sounds like the kind of thinking you only do alone. And then there is <em>Bejeweled</em>, which is something else entirely — about owning your power, about remembering that you are the author of your own story. You don't forget that. And <em>Karma</em>, which in my family is not just a concept but a genuine belief. <em>Karma is the breeze in my hair on the weekend</em> — that is not just a catchy lyric. That is a real feeling. Everything good that comes to you is your karma, and what comes to other people is theirs. Karma is a relaxing thought, she says. Yes. It is.</p>
+          </div>
+          <div class="album-mood-line">
+            Mood: studying late when the rest of the world is asleep.
+            The sound of your own thinking getting too loud.
+            Realizing you are exactly where you chose to be.
+          </div>
+        </div>
+      </div>
+
+      <!-- TTPD -->
+      <div class="album-entry">
+        <div class="album-cover-placeholder">The Tortured Poets Department</div>
+        <div class="album-content">
+          <h3 class="album-title">The Tortured Poets Department</h3>
+          <div class="album-artist">TAYLOR SWIFT · 2024</div>
+          <div class="album-interpretation">
+            <p>31 tracks. The most fucked up, brilliant, authentic, raw music I have ever heard in my life. Every single song is basically poetry. The Stevie Nicks of it all — gut-wrenching, but so, so beautiful.</p>
+            <p><em>Who's Afraid of Little Old Me?</em> is one of my favourite songs on the album. It is about owning your power after someone has wronged you. About getting up. And the thing is — it speaks to your character more than theirs. That is a real idea. And then there is this thing the album does that I think is the whole point of music: these songs are not what you would say to someone. You would never actually say these things out loud. But they are absolutely what you think, what lives in your head, what you would never let out. And that is why we can relate. Music gives a voice to the thoughts we carry privately, and that is what makes it matter.</p>
+            <p>But the song I could talk about for hours is <em>The Manuscript</em>. The production in that song does something I have never heard before — it literally matches the story as it progresses. Throughout the song, loose piano keys. Just individual notes. And then at the moment she sings <em>"she wasn't sure"</em> — those loose keys become full chords. You feel the story shift in real time. A violin comes in. Builds. Fades. And then the bridge arrives — the peak of everything — and after it, the album ends on this: <em>the only thing that's left is the manuscript, one last souvenir from my trip to your shores. Now and then I reread the manuscript, but the story isn't mine anymore.</em> The professor said to write what you know. Looking backwards might be the only way to move forward. I could genuinely spend hours on this album. Hours.</p>
+          </div>
+          <div class="album-mood-line">
+            Mood: thoughts you carry but would never say.
+            The moment a story stops belonging to you.
+            Getting up anyway.
+          </div>
+        </div>
+      </div>
+
+      <!-- TAPESTRY -->
+      <div class="album-entry">
+        <div class="album-cover-placeholder">Tapestry</div>
+        <div class="album-content">
+          <h3 class="album-title">Tapestry</h3>
+          <div class="album-artist">CAROLE KING · 1971</div>
+          <div class="album-interpretation">
+            <p>Come on. This is a classic. An actual, undeniable classic. The songwriting on this album is on a level that almost doesn't make sense — every song lands, every lyric earns its place, and the whole thing feels like it was written by someone who simply understood people better than most.</p>
+            <p><em>Will You Love Me Tomorrow</em> is probably my favourite Carole King song. There is a vulnerability in that question — asking for permanence while knowing you can't guarantee it — that is completely timeless. <em>You've Got a Friend</em> is what it sounds like to mean something without overcomplicating it. <em>I Feel the Earth Move</em>, <em>Way Over Yonder</em>, <em>You Make Me Feel Like a Natural Woman</em> — that last one is one of the greatest songs ever written. Full stop. There is no argument to be had. Tapestry is the kind of album that makes you understand why albums exist.</p>
+          </div>
+          <div class="album-mood-line">
+            Mood: Sunday morning with the window open.
+            Something warm on the stove.
+            The kind of music that doesn't need an occasion.
+          </div>
+        </div>
+      </div>
+
+      <!-- A MATTER OF TIME -->
+      <div class="album-entry">
+        <div class="album-cover-placeholder">A Matter of Time</div>
+        <div class="album-content">
+          <h3 class="album-title">A Matter of Time</h3>
+          <div class="album-artist">LAUFEY · 2024</div>
+          <div class="album-interpretation">
+            <p>Genuinely sickening. That is the word. This album is genuinely sickening in the best possible way.</p>
+            <p><em>Too Little Too Late</em> is one of the most devastating songs I know. It is about arriving too late — the person is already getting married and you are standing outside of that. <em>I'll toast outside your wedding day, whisper vows I'll never say to you, 'cause it's a little too late.</em> The bridge of that song is the peak of both the story and the production. Everything builds to that point and then the weight of it just lands. Completely.</p>
+            <p>And then the album has this other energy too — <em>Sabotage</em> is amazing, there is a cheeky badass quality to some of these tracks that balances the devastation perfectly. The deluxe version adds <em>Mad Woman</em> which is fun and catchy in a way that feels like a breath of air, and then <em>I Wait</em> — just <em>I Wait, I Wait, I Wait</em> — which is so sad and so real that it almost shouldn't be allowed. But it is, and it should be.</p>
+          </div>
+          <div class="album-mood-line">
+            Mood: arriving somewhere after it has already closed.
+            The words you didn't say, arranged perfectly.
+            Devastation that sounds this beautiful should be illegal.
+          </div>
+        </div>
+      </div>
+
+      <!-- THE ART OF LOVING -->
+      <div class="album-entry">
+        <div class="album-cover-placeholder">The Art of Loving</div>
+        <div class="album-content">
+          <h3 class="album-title">The Art of Loving</h3>
+          <div class="album-artist">OLIVIA DEAN · 2023</div>
+          <div class="album-interpretation">
+            <p>12 tracks. Cohesive in a way that is hard to find. The message is exactly what it says it is — the art of loving — and what she does is show you all the different shapes love takes. Breakup songs. Self-love songs. Happy songs. Songs that are silly and cheeky and kind of feel like manifestation. It is a healing album. The kind you put on when something in you needs to settle.</p>
+            <p>My favourite song is <em>I've Seen It</em>. The way she talks about love in that song — making something that feels abstract into something completely tangible — is unlike anything else. <em>I've seen it dance with friends around the table, Eleanor, Rosie and Louise.</em> Those are her sisters. And I have three sisters. So of course that line hits differently. <em>The fairytale goes on and on, my mom and dad, they got me hooked.</em> Yes. That is exactly it. And the whole album closes on the line <em>I guess it's been inside me all along.</em> That is everyone's journey with love and acceptance, right? You look everywhere for it and then you realise it was already there. That is a perfect ending. I love this album so much.</p>
+          </div>
+          <div class="album-mood-line">
+            Mood: the realisation that love was never outside you.
+            Sisters around a table. Parents who showed you what it looks like.
+            Something that was there all along, waiting to be named.
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- FIELD NOTES -->
+  <section class="per-section fade-in">
+    <div class="per-section-header">
+      <span class="per-section-tag">archive iii /</span>
+      <h2 class="per-section-title">Field Notes</h2>
+      <div class="per-section-line"></div>
+    </div>
+
+    <div class="notes-grid">
+      <div class="note-card">
+        <div class="note-date">note — autumn, late semester</div>
+        <h3 class="note-title">On the feeling of not knowing enough yet</h3>
+        <div class="note-body">
+          <p>There is a specific humility that comes with studying thermodynamics for the first time. You realize that the universe has been operating according to these laws since before any human observed them. The laws did not need to be written down to be true. You are late to something enormous.</p>
+          <p>I find this comforting rather than discouraging. <em>I am not behind. I am arriving.</em> The archive is older than I am, and there is beauty in that. All I can do is read carefully, work honestly, and not pretend to understand more than I do.</p>
+          <p>The pretending is the only part that would actually be shameful.</p>
+        </div>
+      </div>
+
+      <div class="note-card">
+        <div class="note-date">note — night before an exam</div>
+        <h3 class="note-title">Both things at once</h3>
+        <div class="note-body">
+          <p>I sometimes feel like two people who have agreed to share one body and are mostly at peace with this arrangement. One of them wants to derive equations and understand how chemical reactors scale and spend years in research. The other wants to sit by water and think about nothing in particular.</p>
+          <p>They are not in conflict. They have the same center of gravity. <em>Both of them are trying to understand something true.</em> One uses numbers. The other uses feeling. Neither is more honest than the other.</p>
+          <p>The website you are currently reading is the architecture of that agreement.</p>
+        </div>
+      </div>
+
+      <div class="note-card">
+        <div class="note-date">note — sometime between seasons</div>
+        <h3 class="note-title">What I am building toward</h3>
+        <div class="note-body">
+          <p>I do not know exactly what I will build with this education. I know it will have something to do with the planet, with resources, with the places where chemistry meets consequence. I know it will require patience. I know it will take longer than I currently expect.</p>
+          <p>I also know that what I am building toward is not a title or a salary or a position. <em>It is a kind of capacity</em> — the ability to see a complex system and understand it well enough to make it better. That is what engineering is, underneath all the notation.</p>
+          <p>I am trying to become someone with that capacity. I am somewhere in the middle of that attempt. This archive is the documentation.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PERSONAL CONTACT -->
+  <section class="per-section fade-in">
+    <div class="per-section-header">
+      <span class="per-section-tag">archive iv /</span>
+      <h2 class="per-section-title">Say Hello</h2>
+      <div class="per-section-line"></div>
+    </div>
+
+    <div class="per-contact-wrap">
+      <p class="per-contact-text">
+        If something in here resonated — a film, a thought, a note at 2 AM —
+        I would genuinely like to hear from you.
+        The professional side has a transmission log. This side just has an open door.
+      </p>
+      <div class="per-contact-links">
+        <a href="mailto:shreyas@example.com" class="per-contact-link">
+          <span class="per-contact-link-label">email</span>
+          <span>shreyas@example.com</span>
+        </a>
+        <a href="#" class="per-contact-link">
+          <span class="per-contact-link-label">instagram</span>
+          <span>@shreyaszeeshan</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <footer class="site-footer" style="border-top-color: var(--per-border); font-family: 'EB Garamond', serif; font-size: 0.85rem; letter-spacing: 0.05em; color: var(--per-text-dim);">
+    <span>somewhere between systems and humanity</span>
+    <span>Shreyas Zeeshan · 2026</span>
+  </footer>
+
+</div><!-- /personal-side -->
+
+
+<script>
+// ===== IDENTITY SWITCH =====
+function setIdentity(id) {
+  const body = document.body;
+  const btnPro = document.getElementById('btn-pro');
+  const btnPer = document.getElementById('btn-per');
+
+  if (id === 'per') {
+    body.classList.add('personal');
+    btnPro.classList.remove('active');
+    btnPer.classList.add('active');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    // Make all personal-side fade-in elements visible immediately
+    setTimeout(() => {
+      document.querySelectorAll('#personal-side .fade-in').forEach(el => {
+        el.classList.add('visible');
+      });
+    }, 80);
+  } else {
+    body.classList.remove('personal');
+    btnPro.classList.add('active');
+    btnPer.classList.remove('active');
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    setTimeout(() => {
+      document.querySelectorAll('#pro-side .fade-in').forEach(el => {
+        el.classList.add('visible');
+      });
+    }, 80);
+  }
+}
+
+// ===== INTERSECTION OBSERVER FOR FADE-IN =====
+function checkFadeIns() {
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('visible');
+      }
+    });
+  }, { threshold: 0.1 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+}
+checkFadeIns();
+
+// ===== PARTICLE SYSTEM =====
+(function() {
+  const canvas = document.getElementById('particles-canvas');
+  const ctx = canvas.getContext('2d');
+  let particles = [];
+  let animFrame;
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  resize();
+  window.addEventListener('resize', resize);
+
+  function Particle() {
+    this.x = Math.random() * canvas.width;
+    this.y = Math.random() * canvas.height;
+    this.vx = (Math.random() - 0.5) * 0.18;
+    this.vy = (Math.random() - 0.5) * 0.18;
+    this.radius = Math.random() * 1.2 + 0.3;
+    this.opacity = Math.random() * 0.4 + 0.05;
+    this.pulse = Math.random() * Math.PI * 2;
+  }
+
+  Particle.prototype.update = function() {
+    this.x += this.vx;
+    this.y += this.vy;
+    this.pulse += 0.008;
+    if (this.x < 0) this.x = canvas.width;
+    if (this.x > canvas.width) this.x = 0;
+    if (this.y < 0) this.y = canvas.height;
+    if (this.y > canvas.height) this.y = 0;
+  };
+
+  Particle.prototype.draw = function() {
+    const o = this.opacity * (0.6 + 0.4 * Math.sin(this.pulse));
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(74, 127, 165, ${o})`;
+    ctx.fill();
+  };
+
+  // Connection lines between close particles
+  function drawConnections() {
+    const maxDist = 120;
+    for (let i = 0; i < particles.length; i++) {
+      for (let j = i + 1; j < particles.length; j++) {
+        const dx = particles[i].x - particles[j].x;
+        const dy = particles[i].y - particles[j].y;
+        const dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < maxDist) {
+          const opacity = (1 - dist / maxDist) * 0.06;
+          ctx.beginPath();
+          ctx.moveTo(particles[i].x, particles[i].y);
+          ctx.lineTo(particles[j].x, particles[j].y);
+          ctx.strokeStyle = `rgba(74, 127, 165, ${opacity})`;
+          ctx.lineWidth = 0.5;
+          ctx.stroke();
+        }
+      }
+    }
+  }
+
+  // Init particles
+  const count = Math.min(80, Math.floor(window.innerWidth / 16));
+  for (let i = 0; i < count; i++) {
+    particles.push(new Particle());
+  }
+
+  function animate() {
+    animFrame = requestAnimationFrame(animate);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    particles.forEach(p => { p.update(); p.draw(); });
+    drawConnections();
+  }
+  animate();
+})();
+
+// ===== SUBTLE PARALLAX ON HERO =====
+document.addEventListener('mousemove', function(e) {
+  const mx = (e.clientX / window.innerWidth - 0.5);
+  const my = (e.clientY / window.innerHeight - 0.5);
+  const heroName = document.querySelector('.pro-hero-name');
+  if (heroName) {
+    heroName.style.transform = `translate(${mx * 6}px, ${my * 4}px)`;
+  }
+});
+
+// ===== STAGGER FADE-IN ON SPEC BARS =====
+document.querySelectorAll('.spec-bar-fill').forEach((bar, i) => {
+  bar.style.animationDelay = `${i * 0.1}s`;
+});
+</script>
+</body>
+</html>
