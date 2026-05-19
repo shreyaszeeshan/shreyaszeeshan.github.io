@@ -9,16 +9,22 @@
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
 :root {
-  --pro-bg: #07080f;
-  --pro-bg2: #0d0f1a;
-  --pro-surface: #111520;
-  --pro-border: rgba(74, 127, 165, 0.18);
-  --pro-text: #b8c2cc;
-  --pro-text-dim: #4a5568;
-  --pro-text-bright: #dde4ec;
-  --pro-accent: #4a7fa5;
-  --pro-purple: #7b6fa8;
-  --pro-glow: rgba(74, 127, 165, 0.12);
+  --pro-bg: #05080e;
+  --pro-bg2: #09101c;
+  --pro-surface: #0b1220;
+  --pro-panel: #080f1c;
+  --pro-border: rgba(0, 180, 220, 0.16);
+  --pro-border-bright: rgba(0, 220, 255, 0.45);
+  --pro-text: #a8bdc8;
+  --pro-text-dim: #3a5265;
+  --pro-text-bright: #d5e8f2;
+  --pro-accent: #00b8d4;
+  --pro-accent2: #ff9a3c;
+  --pro-purple: #8b7fc8;
+  --pro-green: #3adb76;
+  --pro-cyan: #00d4f0;
+  --pro-glow: rgba(0, 180, 220, 0.12);
+  --pro-glow-bright: rgba(0, 212, 240, 0.28);
   --pro-font-mono: 'Space Mono', monospace;
   --pro-font-body: 'Space Grotesk', sans-serif;
 
@@ -532,8 +538,9 @@ body.personal #aurora-bg { opacity: 0; pointer-events: none; }
   position: absolute;
   top: 0; left: 0;
   height: 100%;
-  background: var(--pro-accent);
+  background: linear-gradient(to right, var(--pro-accent), var(--pro-cyan));
   animation: bar-load 2s ease forwards;
+  box-shadow: 0 0 6px rgba(0,180,220,0.4);
 }
 @keyframes bar-load { from { width: 0; } }
 
@@ -541,33 +548,76 @@ body.personal #aurora-bg { opacity: 0; pointer-events: none; }
 .projects-grid {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5px;
-  border: 1.5px solid var(--pro-border);
+  gap: 2px;
+  background: rgba(0,180,220,0.06);
+  border: 1px solid var(--pro-border);
 }
 
 .mission-card {
-  background: var(--pro-surface);
-  padding: 2rem;
-  border-right: 1px solid var(--pro-border);
-  border-bottom: 1px solid var(--pro-border);
+  background: linear-gradient(145deg, #060d1a 0%, #090f1e 50%, #07101a 100%);
+  padding: 2.2rem;
   cursor: pointer;
-  transition: background 0.3s ease;
+  transition: all 0.35s ease;
   position: relative;
   overflow: hidden;
+  border-top: 1px solid rgba(0,210,240,0.30);
+  border-bottom: 1px solid rgba(0,180,220,0.08);
+  box-shadow: inset 0 1px 0 rgba(0,220,255,0.06), 0 4px 24px rgba(0,0,0,0.5);
 }
 
-.mission-card:hover { background: rgba(74,127,165,0.05); }
+.mission-card:hover {
+  background: linear-gradient(145deg, #081020 0%, #0d1830 50%, #081522 100%);
+  border-top-color: rgba(0,232,255,0.65);
+  box-shadow: inset 0 1px 0 rgba(0,220,255,0.14),
+              0 0 28px rgba(0,180,220,0.10),
+              0 8px 40px rgba(0,0,0,0.6);
+  transform: translateY(-1px);
+}
+
+/* Holographic grid overlay */
 .mission-card::before {
   content: '';
   position: absolute;
-  left: 0; top: 0; bottom: 0;
-  width: 2px;
-  background: var(--pro-accent);
-  transform: scaleY(0);
-  transform-origin: top;
-  transition: transform 0.4s ease;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(0,180,220,0.032) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,180,220,0.032) 1px, transparent 1px);
+  background-size: 22px 22px;
+  pointer-events: none;
 }
-.mission-card:hover::before { transform: scaleY(1); }
+
+/* Animated scan line */
+.mission-card::after {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 36px;
+  background: linear-gradient(to bottom, rgba(0,180,220,0.05), transparent);
+  animation: card-scan 6s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes card-scan {
+  0%   { top: -36px; opacity: 0; }
+  10%  { opacity: 1; }
+  85%  { opacity: 0.4; }
+  100% { top: 100%; opacity: 0; }
+}
+
+/* Corner brackets */
+.cc {
+  position: absolute;
+  width: 10px; height: 10px;
+  border-color: var(--pro-accent);
+  border-style: solid;
+  opacity: 0.35;
+  transition: opacity 0.3s, border-color 0.3s;
+}
+.mission-card:hover .cc { opacity: 0.85; border-color: var(--pro-cyan); }
+.cc.tl { top: 8px; left: 8px; border-width: 1px 0 0 1px; }
+.cc.tr { top: 8px; right: 8px; border-width: 1px 1px 0 0; }
+.cc.bl { bottom: 8px; left: 8px; border-width: 0 0 1px 1px; }
+.cc.br { bottom: 8px; right: 8px; border-width: 0 1px 1px 0; }
 
 .mission-id {
   font-family: var(--pro-font-mono);
@@ -586,8 +636,8 @@ body.personal #aurora-bg { opacity: 0; pointer-events: none; }
   border: 1px solid;
   margin-bottom: 1rem;
 }
-.status-active { color: #4a9a65; border-color: #4a9a65; }
-.status-ongoing { color: var(--pro-accent); border-color: var(--pro-accent); }
+.status-active { color: #3adb76; border-color: rgba(58,219,118,0.45); text-shadow: 0 0 8px rgba(58,219,118,0.3); }
+.status-ongoing { color: var(--pro-accent); border-color: rgba(0,184,212,0.35); }
 .status-archived { color: var(--pro-text-dim); border-color: var(--pro-text-dim); }
 
 .mission-title {
@@ -618,9 +668,15 @@ body.personal #aurora-bg { opacity: 0; pointer-events: none; }
   font-family: var(--pro-font-mono);
   font-size: 0.45rem;
   letter-spacing: 0.2em;
-  color: var(--pro-purple);
-  border: 1px solid rgba(123,111,168,0.25);
-  padding: 2px 6px;
+  color: var(--pro-cyan);
+  border: 1px solid rgba(0,212,240,0.2);
+  padding: 2px 8px;
+  background: rgba(0,180,220,0.04);
+}
+.mission-tag:nth-child(even) {
+  color: var(--pro-accent2);
+  border-color: rgba(255,154,60,0.2);
+  background: rgba(255,154,60,0.04);
 }
 
 .mission-card-footer {
@@ -680,9 +736,13 @@ body.personal #aurora-bg { opacity: 0; pointer-events: none; }
 .skill-dot {
   width: 5px; height: 5px;
   border-radius: 50%;
-  border: 1px solid var(--pro-accent);
+  border: 1px solid rgba(0,180,220,0.35);
 }
-.skill-dot.filled { background: var(--pro-accent); }
+.skill-dot.filled {
+  background: var(--pro-cyan);
+  border-color: var(--pro-cyan);
+  box-shadow: 0 0 5px rgba(0,212,240,0.45);
+}
 
 /* PRO CONTACT */
 .transmission-panel {
@@ -733,8 +793,9 @@ body.personal #aurora-bg { opacity: 0; pointer-events: none; }
 }
 .contact-link:hover {
   border-color: var(--pro-accent);
-  color: var(--pro-accent);
-  background: rgba(74,127,165,0.05);
+  color: var(--pro-cyan);
+  background: rgba(0,180,220,0.05);
+  box-shadow: 0 0 16px rgba(0,180,220,0.06);
 }
 .contact-link-label {
   font-size: 0.5rem;
@@ -1164,13 +1225,343 @@ body.personal .site-footer {
 
 /* GLOW PULSE ANIMATION */
 @keyframes glow-pulse {
-  0%, 100% { box-shadow: 0 0 20px rgba(74,127,165,0.05); }
-  50% { box-shadow: 0 0 40px rgba(74,127,165,0.12); }
+  0%, 100% { box-shadow: 0 0 20px rgba(0,180,220,0.05); }
+  50% { box-shadow: 0 0 40px rgba(0,180,220,0.14); }
 }
 
-/* RESPONSIVE */
+/* ===== MISSION DOSSIER MODAL ===== */
+#mission-particles {
+  position: fixed; inset: 0;
+  z-index: 1998; pointer-events: none;
+  opacity: 0; transition: opacity 0.2s ease;
+}
+#mission-particles.active { opacity: 1; }
+
+#mission-modal {
+  position: fixed; inset: 0;
+  z-index: 1999;
+  display: flex; align-items: center; justify-content: center;
+  pointer-events: none;
+  opacity: 0; transition: opacity 0.45s ease;
+}
+#mission-modal.open { pointer-events: all; opacity: 1; }
+
+.modal-backdrop {
+  position: absolute; inset: 0;
+  background: rgba(3, 7, 16, 0.90);
+  backdrop-filter: blur(10px);
+}
+
+.modal-container {
+  position: relative;
+  width: min(860px, 92vw);
+  max-height: 88vh;
+  overflow-y: auto;
+  background: linear-gradient(155deg, #080e1e 0%, #0c1428 60%, #080e1c 100%);
+  border: 1px solid rgba(0,210,240,0.25);
+  border-top: 2px solid rgba(0,230,255,0.60);
+  box-shadow:
+    0 0 80px rgba(0,180,220,0.12),
+    0 0 0 1px rgba(0,180,220,0.06),
+    0 32px 80px rgba(0,0,0,0.7);
+  transform: translateY(24px);
+  transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0,180,220,0.3) transparent;
+}
+#mission-modal.open .modal-container { transform: translateY(0); }
+
+/* Modal inner grid overlay */
+.modal-container::before {
+  content: '';
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(0,180,220,0.025) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0,180,220,0.025) 1px, transparent 1px);
+  background-size: 28px 28px;
+  pointer-events: none;
+}
+
+.modal-inner { padding: 2.8rem 3rem; position: relative; }
+
+.modal-top-bar {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 2.2rem;
+  padding-bottom: 1.2rem;
+  border-bottom: 1px solid rgba(0,180,220,0.15);
+}
+
+.modal-mission-id {
+  font-family: var(--pro-font-mono);
+  font-size: 0.5rem; letter-spacing: 0.35em;
+  color: var(--pro-accent); margin-bottom: 0.3rem;
+}
+.modal-mission-title {
+  font-family: var(--pro-font-mono);
+  font-size: clamp(1.1rem, 2.5vw, 1.5rem);
+  font-weight: 700; letter-spacing: 0.04em;
+  color: var(--pro-text-bright); text-transform: uppercase;
+  line-height: 1.25;
+}
+.modal-close {
+  background: none; border: 1px solid rgba(0,180,220,0.25);
+  color: var(--pro-text-dim); font-family: var(--pro-font-mono);
+  font-size: 0.7rem; cursor: pointer;
+  padding: 0.3rem 0.7rem; letter-spacing: 0.1em;
+  transition: all 0.2s ease; flex-shrink: 0; margin-top: 0.2rem;
+}
+.modal-close:hover { border-color: var(--pro-cyan); color: var(--pro-cyan); }
+
+.modal-status-row {
+  display: flex; gap: 2rem; flex-wrap: wrap;
+  margin-bottom: 2rem;
+  font-family: var(--pro-font-mono); font-size: 0.55rem;
+  letter-spacing: 0.2em; color: var(--pro-text-dim);
+}
+.modal-status-item span { color: var(--pro-text); display: block; margin-top: 2px; font-size: 0.6rem; }
+
+.modal-section-label {
+  font-family: var(--pro-font-mono);
+  font-size: 0.5rem; letter-spacing: 0.35em;
+  color: var(--pro-accent); text-transform: uppercase;
+  margin-bottom: 0.8rem; margin-top: 2rem;
+}
+.modal-text {
+  font-family: var(--pro-font-body);
+  font-size: 0.9rem; line-height: 1.85;
+  color: var(--pro-text); font-weight: 300;
+  margin-bottom: 1rem;
+}
+.modal-text em { color: var(--pro-cyan); font-style: normal; }
+
+.modal-params {
+  display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1px; background: rgba(0,180,220,0.08);
+  border: 1px solid rgba(0,180,220,0.12);
+  margin-top: 1.5rem;
+}
+.modal-param {
+  background: var(--pro-panel);
+  padding: 1rem 1.2rem;
+  font-family: var(--pro-font-mono);
+}
+.modal-param-key { font-size: 0.45rem; letter-spacing: 0.3em; color: var(--pro-text-dim); margin-bottom: 0.3rem; }
+.modal-param-val { font-size: 0.65rem; color: var(--pro-text-bright); }
+
+.modal-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 2rem; }
+
+/* ===== BIOGRAPHY SECTION ===== */
+.bio-section {
+  padding: 6rem 3rem;
+  border-top: 1px solid var(--per-border);
+}
+.bio-section-header {
+  display: flex; align-items: baseline; gap: 2rem; margin-bottom: 4rem;
+}
+.bio-grid {
+  display: grid; grid-template-columns: 3fr 2fr; gap: 4rem; align-items: start;
+}
+.bio-text {
+  font-family: var(--per-font-body);
+  font-size: 1.05rem; line-height: 1.95; color: var(--per-text);
+}
+.bio-text p { margin-bottom: 1.5rem; }
+.bio-text em { color: var(--per-accent); font-style: italic; }
+.bio-text strong { color: var(--per-text-bright); font-weight: normal; }
+
+.bio-sidebar {
+  display: flex; flex-direction: column; gap: 0;
+  border: 1px solid var(--per-border);
+  background: rgba(143,168,136,0.03);
+  position: relative;
+}
+.bio-sidebar::before {
+  content: 'PEOPLE / PLACES / THINGS';
+  position: absolute; top: -0.7rem; left: 1rem;
+  font-family: var(--per-font-body); font-style: italic;
+  font-size: 0.75rem; color: var(--per-accent);
+  background: var(--per-bg); padding: 0 0.5rem;
+}
+.bio-sidebar-item {
+  padding: 1rem 1.4rem;
+  border-bottom: 1px solid var(--per-border);
+  font-family: var(--per-font-body);
+}
+.bio-sidebar-item:last-child { border-bottom: none; }
+.bio-sidebar-label {
+  font-size: 0.7rem; letter-spacing: 0.08em;
+  color: var(--per-text-dim); margin-bottom: 0.2rem;
+  font-style: italic;
+}
+.bio-sidebar-val {
+  font-size: 0.95rem; color: var(--per-text-bright); line-height: 1.5;
+}
+
+/* ===== BOOKSHELF ===== */
+.bookshelf-section {
+  padding: 5rem 3rem 2rem;
+  border-top: 1px solid var(--per-border);
+  text-align: center;
+}
+.bookshelf-section .per-section-header {
+  text-align: left; margin-bottom: 3rem;
+}
+.bookshelf-hint {
+  font-family: var(--per-font-body); font-style: italic;
+  font-size: 0.85rem; color: var(--per-text-dim);
+  margin-bottom: 3.5rem; text-align: center;
+}
+
+.shelf-wrap {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  padding-bottom: 22px;
+}
+
+.books-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 5px;
+  perspective: 1400px;
+  padding: 0 20px;
+}
+
+.book {
+  position: relative;
+  cursor: pointer;
+  transform-style: preserve-3d;
+  transform: rotateY(0deg) translateY(0px);
+  transition: transform 0.4s cubic-bezier(0.34, 1.4, 0.64, 1), filter 0.35s ease;
+  filter: brightness(0.78) saturate(0.8);
+  border-radius: 2px 3px 3px 2px;
+}
+.book:hover {
+  transform: rotateY(-10deg) translateY(-14px);
+  filter: brightness(1.05) saturate(1);
+}
+.book.selected {
+  transform: rotateY(-6deg) translateY(-20px);
+  filter: brightness(1.1) saturate(1.05);
+}
+
+.book-spine {
+  display: flex; align-items: center; justify-content: center;
+  writing-mode: vertical-rl;
+  font-family: 'Playfair Display', serif;
+  font-size: 0.68rem; letter-spacing: 0.18em;
+  color: rgba(255, 228, 140, 0.80);
+  text-shadow: 0 0 10px rgba(255,200,70,0.35);
+  padding: 1.2rem 0;
+  border-radius: 2px 3px 3px 2px;
+  overflow: hidden;
+  user-select: none;
+  position: relative;
+}
+.book-spine-text { transform: rotate(180deg); position: relative; z-index: 1; }
+
+/* Leather gradient per book */
+.book-cinema .book-spine {
+  width: 54px; height: 235px;
+  background: linear-gradient(180deg, #3c1018 0%, #5e1e2a 18%, #4a1520 38%, #5e1e2a 55%, #3c1018 72%, #5e1e2a 88%, #3c1018 100%);
+  box-shadow: 2px 0 10px rgba(0,0,0,0.6), inset -3px 0 6px rgba(0,0,0,0.35), inset 1px 0 3px rgba(255,150,100,0.05);
+}
+.book-sound .book-spine {
+  width: 50px; height: 215px;
+  background: linear-gradient(180deg, #0e1a30 0%, #182848 18%, #0e1a30 38%, #182848 55%, #0e1a30 72%, #182848 88%, #0e1a30 100%);
+  box-shadow: 2px 0 10px rgba(0,0,0,0.6), inset -3px 0 6px rgba(0,0,0,0.35), inset 1px 0 3px rgba(100,140,220,0.05);
+}
+.book-notes .book-spine {
+  width: 46px; height: 224px;
+  background: linear-gradient(180deg, #12201a 0%, #1c3224 18%, #12201a 38%, #1c3224 55%, #12201a 72%, #1c3224 88%, #12201a 100%);
+  box-shadow: 2px 0 10px rgba(0,0,0,0.6), inset -3px 0 6px rgba(0,0,0,0.35), inset 1px 0 3px rgba(100,180,100,0.05);
+}
+.book-adventures .book-spine {
+  width: 52px; height: 205px;
+  background: linear-gradient(180deg, #0c1e28 0%, #143040 18%, #0c1e28 38%, #143040 55%, #0c1e28 72%, #143040 88%, #0c1e28 100%);
+  box-shadow: 2px 0 10px rgba(0,0,0,0.6), inset -3px 0 6px rgba(0,0,0,0.35), inset 1px 0 3px rgba(80,180,180,0.05);
+}
+.book-philosophy .book-spine {
+  width: 56px; height: 218px;
+  background: linear-gradient(180deg, #201030 0%, #321848 18%, #201030 38%, #321848 55%, #201030 72%, #321848 88%, #201030 100%);
+  box-shadow: 2px 0 10px rgba(0,0,0,0.6), inset -3px 0 6px rgba(0,0,0,0.35), inset 1px 0 3px rgba(160,100,200,0.05);
+}
+
+/* Gold decorative lines on each spine */
+.book-spine::before {
+  content: '';
+  position: absolute; top: 16px; left: 50%;
+  transform: translateX(-50%);
+  width: 70%; height: 1px;
+  background: rgba(255,210,90,0.3);
+}
+.book-spine::after {
+  content: '';
+  position: absolute; bottom: 16px; left: 50%;
+  transform: translateX(-50%);
+  width: 70%; height: 1px;
+  background: rgba(255,210,90,0.3);
+}
+
+/* Wooden shelf plank */
+.shelf-plank {
+  width: calc(100% + 60px);
+  height: 18px;
+  background: linear-gradient(180deg, #5c3e22 0%, #3e2810 35%, #6a4828 55%, #3e2810 80%, #4a3218 100%);
+  box-shadow: 0 6px 18px rgba(0,0,0,0.5), 0 -1px 0 rgba(255,180,80,0.08);
+  border-radius: 1px;
+  position: relative; overflow: hidden;
+}
+.shelf-plank::after {
+  content: '';
+  position: absolute; inset: 0;
+  background: repeating-linear-gradient(90deg, transparent 0, transparent 14%, rgba(0,0,0,0.07) 14%, rgba(0,0,0,0.07) 15%);
+}
+
+/* Book world sections */
+.book-worlds { padding: 0 3rem 2rem; }
+.book-world { display: none; }
+.book-world.active {
+  display: block;
+  animation: world-appear 0.6s ease;
+}
+@keyframes world-appear {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.world-breadcrumb {
+  font-family: var(--per-font-body); font-style: italic;
+  font-size: 0.8rem; color: var(--per-text-dim);
+  padding: 1.5rem 0 0;
+  letter-spacing: 0.05em;
+}
+
+/* Placeholder world content */
+.placeholder-world {
+  padding: 6rem 0 4rem;
+  text-align: center;
+  border-top: 1px solid var(--per-border);
+}
+.placeholder-world-icon {
+  font-size: 3rem; margin-bottom: 1.5rem; opacity: 0.4;
+}
+.placeholder-world-title {
+  font-family: var(--per-font-serif);
+  font-size: 1.8rem; color: var(--per-text-bright);
+  margin-bottom: 1rem;
+}
+.placeholder-world-text {
+  font-family: var(--per-font-body); font-style: italic;
+  font-size: 1rem; color: var(--per-text-dim);
+  max-width: 400px; margin: 0 auto; line-height: 1.8;
+}
+
+/* ===== RESPONSIVE */
 @media (max-width: 768px) {
-  .pro-hero, .per-hero, .pro-section, .per-section { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .pro-hero, .per-hero, .pro-section, .per-section,
+  .bio-section, .bookshelf-section, .book-worlds { padding-left: 1.5rem; padding-right: 1.5rem; }
   .pro-about-grid { grid-template-columns: 1fr; }
   .systems-grid { grid-template-columns: 1fr; }
   .film-entry { grid-template-columns: 1fr; }
@@ -1178,6 +1569,15 @@ body.personal .site-footer {
   .album-entry { grid-template-columns: 1fr; }
   .album-cover-placeholder { width: 100%; aspect-ratio: 1; max-width: 180px; }
   #identity-nav { padding: 0 1.5rem; }
+  .bio-grid { grid-template-columns: 1fr; }
+  .books-row { gap: 3px; }
+  .book-cinema .book-spine { width: 42px; height: 190px; }
+  .book-sound .book-spine { width: 40px; height: 172px; }
+  .book-notes .book-spine { width: 38px; height: 180px; }
+  .book-adventures .book-spine { width: 40px; height: 165px; }
+  .book-philosophy .book-spine { width: 42px; height: 175px; }
+  .modal-inner { padding: 1.8rem 1.5rem; }
+  .modal-params { grid-template-columns: 1fr 1fr; }
 }
 
 /* FADE IN */
@@ -1288,6 +1688,34 @@ body.personal .site-footer {
     font-family="'Space Mono', monospace" font-size="6"
     fill="#4a7fa5" fill-opacity="0.25" letter-spacing="2">SGR / ♐ / CATALOG-IAU</text>
 </svg>
+
+<!-- MISSION PARTICLE CANVAS -->
+<canvas id="mission-particles"></canvas>
+
+<!-- MISSION DOSSIER MODAL -->
+<div id="mission-modal">
+  <div class="modal-backdrop" onclick="closeMissionModal()"></div>
+  <div class="modal-container">
+    <div class="modal-inner">
+      <div class="modal-top-bar">
+        <div>
+          <div class="modal-mission-id" id="modal-mission-id">MISSION-ID: —</div>
+          <div class="modal-mission-title" id="modal-mission-title">—</div>
+        </div>
+        <button class="modal-close" onclick="closeMissionModal()">[ CLOSE ]</button>
+      </div>
+      <div class="modal-status-row" id="modal-status-row"></div>
+      <div class="modal-section-label">// MISSION OVERVIEW</div>
+      <div class="modal-text" id="modal-overview"></div>
+      <div class="modal-section-label">// METHODOLOGY</div>
+      <div class="modal-text" id="modal-methodology"></div>
+      <div class="modal-section-label">// CURRENT STATUS &amp; FINDINGS</div>
+      <div class="modal-text" id="modal-findings"></div>
+      <div class="modal-params" id="modal-params"></div>
+      <div class="modal-tags" id="modal-tags"></div>
+    </div>
+  </div>
+</div>
 
 <!-- IDENTITY NAV -->
 <nav id="identity-nav">
@@ -1422,7 +1850,8 @@ body.personal .site-footer {
     </div>
 
     <div class="projects-grid">
-      <div class="mission-card">
+      <div class="mission-card" onclick="openMission('ENV-SYS-001', event)">
+        <span class="cc tl"></span><span class="cc tr"></span><span class="cc bl"></span><span class="cc br"></span>
         <div class="mission-id">MISSION-ID: ENV-SYS-001 / REV 1.2</div>
         <div class="mission-status status-active">● ACTIVE</div>
         <div class="mission-title">Atmospheric Carbon<br>Sequestration Model</div>
@@ -1444,7 +1873,8 @@ body.personal .site-footer {
         </div>
       </div>
 
-      <div class="mission-card">
+      <div class="mission-card" onclick="openMission('BIOCHEM-002', event)">
+        <span class="cc tl"></span><span class="cc tr"></span><span class="cc bl"></span><span class="cc br"></span>
         <div class="mission-id">MISSION-ID: BIOCHEM-002 / REV 0.8</div>
         <div class="mission-status status-ongoing">◐ IN PROGRESS</div>
         <div class="mission-title">Membrane Filtration<br>Efficiency Study</div>
@@ -1465,7 +1895,8 @@ body.personal .site-footer {
         </div>
       </div>
 
-      <div class="mission-card">
+      <div class="mission-card" onclick="openMission('THERMO-003', event)">
+        <span class="cc tl"></span><span class="cc tr"></span><span class="cc bl"></span><span class="cc br"></span>
         <div class="mission-id">MISSION-ID: THERMO-003 / REV 2.0</div>
         <div class="mission-status status-active">● ACTIVE</div>
         <div class="mission-title">Phase Transition<br>Thermodynamics</div>
@@ -1486,7 +1917,8 @@ body.personal .site-footer {
         </div>
       </div>
 
-      <div class="mission-card">
+      <div class="mission-card" onclick="openMission('COMP-004', event)">
+        <span class="cc tl"></span><span class="cc tr"></span><span class="cc bl"></span><span class="cc br"></span>
         <div class="mission-id">MISSION-ID: COMP-004 / REV 0.5</div>
         <div class="mission-status status-ongoing">◐ IN PROGRESS</div>
         <div class="mission-title">CFD Reactor<br>Optimization</div>
@@ -1687,6 +2119,105 @@ body.personal .site-footer {
     <div class="per-warm-line"></div>
   </section>
 
+  <!-- BIOGRAPHY -->
+  <section class="bio-section fade-in">
+    <div class="bio-section-header per-section-header">
+      <span class="per-section-tag">origin file /</span>
+      <h2 class="per-section-title">About This Person</h2>
+      <div class="per-section-line"></div>
+    </div>
+    <div class="bio-grid">
+      <div class="bio-text">
+        <p>I grew up in a household of six — my father, my mother, and three sisters. Loud, warm, opinionated, and deeply invested in each other. The kind of family where dinner conversations go somewhere unexpected and everyone has something to say about it. That environment is probably responsible for most of who I am.</p>
+        <p>We believe in karma. Not as a vague idea, but as a real governing principle — that <em>what you put into the world comes back to you</em>, that the good things arriving in your life are the return on something you gave earlier, and that what comes to others is equally theirs. It is a relaxing thought, honestly. It takes the urgency out of wanting to control outcomes and replaces it with something closer to trust in the process.</p>
+        <p>I study chemical engineering because I am genuinely fascinated by <strong>the invisible architecture of things</strong> — how molecules behave under pressure, how energy moves through systems, how the difference between two states of matter is just a question of conditions. These are not abstract puzzles to me. They feel like the deepest description of reality we have, and I want to understand them thoroughly.</p>
+        <p>But I also watch films twice to understand them. I find music terrifying in its accuracy. I think in long sentences and write things down at odd hours. The engineer and the person who needs stories to make sense of the world are not in conflict — they have the same center of gravity. <em>Both are trying to understand something true.</em></p>
+        <p>I connect with Grace, from Project Hail Mary — someone who wanted to teach, who ended up doing something much larger almost by accident, just by showing up and being curious. I connect with Jo, from Little Women — the urgency to make something that belongs entirely to you, even when no one around you quite understands the shape of it yet. I am somewhere between those two people, trying to figure out what I am building toward.</p>
+        <p>This is the archive of that process. It is not finished. It is not supposed to be.</p>
+      </div>
+      <div class="bio-sidebar">
+        <div class="bio-sidebar-item">
+          <div class="bio-sidebar-label">field of study</div>
+          <div class="bio-sidebar-val">Chemical Engineering</div>
+        </div>
+        <div class="bio-sidebar-item">
+          <div class="bio-sidebar-label">year</div>
+          <div class="bio-sidebar-val">First year — in progress</div>
+        </div>
+        <div class="bio-sidebar-item">
+          <div class="bio-sidebar-label">household</div>
+          <div class="bio-sidebar-val">Six people.<br>Three sisters.</div>
+        </div>
+        <div class="bio-sidebar-item">
+          <div class="bio-sidebar-label">governing belief</div>
+          <div class="bio-sidebar-val">Karma is a real thing.<br>What you give comes back.</div>
+        </div>
+        <div class="bio-sidebar-item">
+          <div class="bio-sidebar-label">identifying with</div>
+          <div class="bio-sidebar-val">Grace (PHM) ·<br>Jo March (Little Women)</div>
+        </div>
+        <div class="bio-sidebar-item">
+          <div class="bio-sidebar-label">currently</div>
+          <div class="bio-sidebar-val">Becoming something.<br>Taking my time with it.</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- BOOKSHELF NAVIGATION -->
+  <section class="bookshelf-section fade-in">
+    <div class="per-section-header bio-section-header">
+      <span class="per-section-tag">the archive /</span>
+      <h2 class="per-section-title">Things That Shape Me</h2>
+      <div class="per-section-line"></div>
+    </div>
+    <p class="bookshelf-hint">Select a book to explore that world.</p>
+
+    <div class="shelf-wrap">
+      <div class="books-row">
+
+        <div class="book book-cinema selected" data-book="cinema" onclick="openBook('cinema', this)">
+          <div class="book-spine">
+            <span class="book-spine-text">Cinema</span>
+          </div>
+        </div>
+
+        <div class="book book-sound" data-book="sound" onclick="openBook('sound', this)">
+          <div class="book-spine">
+            <span class="book-spine-text">Sound</span>
+          </div>
+        </div>
+
+        <div class="book book-notes" data-book="notes" onclick="openBook('notes', this)">
+          <div class="book-spine">
+            <span class="book-spine-text">Field Notes</span>
+          </div>
+        </div>
+
+        <div class="book book-adventures" data-book="adventures" onclick="openBook('adventures', this)">
+          <div class="book-spine">
+            <span class="book-spine-text">Adventures</span>
+          </div>
+        </div>
+
+        <div class="book book-philosophy" data-book="philosophy" onclick="openBook('philosophy', this)">
+          <div class="book-spine">
+            <span class="book-spine-text">Philosophy</span>
+          </div>
+        </div>
+
+      </div>
+      <div class="shelf-plank"></div>
+    </div>
+  </section>
+
+  <!-- BOOK WORLDS -->
+  <div class="book-worlds">
+
+    <!-- WORLD: CINEMA -->
+    <div class="book-world active" id="world-cinema">
+      <div class="world-breadcrumb">the archive / Cinema</div>
+
   <!-- CINEMA ARCHIVE -->
   <section class="per-section fade-in">
     <div class="per-section-header">
@@ -1834,6 +2365,11 @@ body.personal .site-footer {
 
     </div>
   </section>
+    </div><!-- /world-cinema -->
+
+    <!-- WORLD: SOUND -->
+    <div class="book-world" id="world-sound">
+      <div class="world-breadcrumb">the archive / Sound</div>
 
   <!-- SOUND DOCUMENTS -->
   <section class="per-section fade-in">
@@ -1939,6 +2475,11 @@ body.personal .site-footer {
 
     </div>
   </section>
+    </div><!-- /world-sound -->
+
+    <!-- WORLD: FIELD NOTES -->
+    <div class="book-world" id="world-notes">
+      <div class="world-breadcrumb">the archive / Field Notes</div>
 
   <!-- FIELD NOTES -->
   <section class="per-section fade-in">
@@ -1980,6 +2521,34 @@ body.personal .site-footer {
       </div>
     </div>
   </section>
+
+    </div><!-- /world-notes -->
+
+    <!-- WORLD: ADVENTURES -->
+    <div class="book-world" id="world-adventures">
+      <div class="world-breadcrumb">the archive / Adventures</div>
+      <div class="placeholder-world">
+        <div class="placeholder-world-icon">🗺</div>
+        <div class="placeholder-world-title">Adventures</div>
+        <div class="placeholder-world-text">
+          This chapter is still being written. Come back when there is more world behind me.
+        </div>
+      </div>
+    </div><!-- /world-adventures -->
+
+    <!-- WORLD: PHILOSOPHY -->
+    <div class="book-world" id="world-philosophy">
+      <div class="world-breadcrumb">the archive / Philosophy</div>
+      <div class="placeholder-world">
+        <div class="placeholder-world-icon">✦</div>
+        <div class="placeholder-world-title">Philosophy</div>
+        <div class="placeholder-world-text">
+          The things I believe are still forming. I will write them down properly once I am more sure of them.
+        </div>
+      </div>
+    </div><!-- /world-philosophy -->
+
+  </div><!-- /book-worlds -->
 
   <!-- PERSONAL CONTACT -->
   <section class="per-section fade-in">
@@ -2028,11 +2597,8 @@ function setIdentity(id) {
     btnPro.classList.remove('active');
     btnPer.classList.add('active');
     window.scrollTo({ top: 0, behavior: 'instant' });
-    // Make all personal-side fade-in elements visible immediately
     setTimeout(() => {
-      document.querySelectorAll('#personal-side .fade-in').forEach(el => {
-        el.classList.add('visible');
-      });
+      document.querySelectorAll('#personal-side .fade-in').forEach(el => el.classList.add('visible'));
     }, 80);
   } else {
     body.classList.remove('personal');
@@ -2040,83 +2606,66 @@ function setIdentity(id) {
     btnPer.classList.remove('active');
     window.scrollTo({ top: 0, behavior: 'instant' });
     setTimeout(() => {
-      document.querySelectorAll('#pro-side .fade-in').forEach(el => {
-        el.classList.add('visible');
-      });
+      document.querySelectorAll('#pro-side .fade-in').forEach(el => el.classList.add('visible'));
     }, 80);
   }
 }
 
 // ===== INTERSECTION OBSERVER FOR FADE-IN =====
-function checkFadeIns() {
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        entry.target.classList.add('visible');
-      }
-    });
-  }, { threshold: 0.1 });
+const fadeObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('visible'); });
+}, { threshold: 0.08 });
+document.querySelectorAll('.fade-in').forEach(el => fadeObserver.observe(el));
 
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-}
-checkFadeIns();
-
-// ===== PARTICLE SYSTEM =====
+// ===== BACKGROUND PARTICLE SYSTEM =====
 (function() {
   const canvas = document.getElementById('particles-canvas');
   const ctx = canvas.getContext('2d');
   let particles = [];
-  let animFrame;
 
-  function resize() {
-    canvas.width = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
+  function resize() { canvas.width = window.innerWidth; canvas.height = window.innerHeight; }
   resize();
   window.addEventListener('resize', resize);
 
   function Particle() {
     this.x = Math.random() * canvas.width;
     this.y = Math.random() * canvas.height;
-    this.vx = (Math.random() - 0.5) * 0.18;
-    this.vy = (Math.random() - 0.5) * 0.18;
-    this.radius = Math.random() * 1.2 + 0.3;
-    this.opacity = Math.random() * 0.4 + 0.05;
+    this.vx = (Math.random() - 0.5) * 0.16;
+    this.vy = (Math.random() - 0.5) * 0.16;
+    this.radius = Math.random() * 1.1 + 0.3;
+    this.opacity = Math.random() * 0.35 + 0.05;
     this.pulse = Math.random() * Math.PI * 2;
   }
-
   Particle.prototype.update = function() {
-    this.x += this.vx;
-    this.y += this.vy;
-    this.pulse += 0.008;
+    this.x += this.vx; this.y += this.vy; this.pulse += 0.007;
     if (this.x < 0) this.x = canvas.width;
     if (this.x > canvas.width) this.x = 0;
     if (this.y < 0) this.y = canvas.height;
     if (this.y > canvas.height) this.y = 0;
   };
-
   Particle.prototype.draw = function() {
     const o = this.opacity * (0.6 + 0.4 * Math.sin(this.pulse));
     ctx.beginPath();
     ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(74, 127, 165, ${o})`;
+    ctx.fillStyle = `rgba(0, 180, 220, ${o})`;
     ctx.fill();
   };
 
-  // Connection lines between close particles
+  const count = Math.min(75, Math.floor(window.innerWidth / 17));
+  for (let i = 0; i < count; i++) particles.push(new Particle());
+
   function drawConnections() {
-    const maxDist = 120;
+    const maxDist = 110;
     for (let i = 0; i < particles.length; i++) {
       for (let j = i + 1; j < particles.length; j++) {
         const dx = particles[i].x - particles[j].x;
         const dy = particles[i].y - particles[j].y;
-        const dist = Math.sqrt(dx * dx + dy * dy);
+        const dist = Math.sqrt(dx*dx + dy*dy);
         if (dist < maxDist) {
-          const opacity = (1 - dist / maxDist) * 0.06;
           ctx.beginPath();
           ctx.moveTo(particles[i].x, particles[i].y);
           ctx.lineTo(particles[j].x, particles[j].y);
-          ctx.strokeStyle = `rgba(74, 127, 165, ${opacity})`;
+          ctx.strokeStyle = `rgba(0, 180, 220, ${(1 - dist/maxDist) * 0.055})`;
           ctx.lineWidth = 0.5;
           ctx.stroke();
         }
@@ -2124,14 +2673,8 @@ checkFadeIns();
     }
   }
 
-  // Init particles
-  const count = Math.min(80, Math.floor(window.innerWidth / 16));
-  for (let i = 0; i < count; i++) {
-    particles.push(new Particle());
-  }
-
   function animate() {
-    animFrame = requestAnimationFrame(animate);
+    requestAnimationFrame(animate);
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     particles.forEach(p => { p.update(); p.draw(); });
     drawConnections();
@@ -2139,20 +2682,262 @@ checkFadeIns();
   animate();
 })();
 
-// ===== SUBTLE PARALLAX ON HERO =====
+// ===== PARALLAX ON HERO =====
 document.addEventListener('mousemove', function(e) {
   const mx = (e.clientX / window.innerWidth - 0.5);
   const my = (e.clientY / window.innerHeight - 0.5);
   const heroName = document.querySelector('.pro-hero-name');
-  if (heroName) {
-    heroName.style.transform = `translate(${mx * 6}px, ${my * 4}px)`;
-  }
+  if (heroName) heroName.style.transform = `translate(${mx * 6}px, ${my * 4}px)`;
 });
 
-// ===== STAGGER FADE-IN ON SPEC BARS =====
+// ===== SPEC BAR STAGGER =====
 document.querySelectorAll('.spec-bar-fill').forEach((bar, i) => {
   bar.style.animationDelay = `${i * 0.1}s`;
 });
+
+// ===== MISSION DOSSIER DATA =====
+const MISSIONS = {
+  'ENV-SYS-001': {
+    id: 'ENV-SYS-001 / REV 1.2',
+    title: 'Atmospheric Carbon<br>Sequestration Model',
+    status: '● ACTIVE', statusClass: 'status-active',
+    initiated: '2025.09', revision: 'REV 1.2',
+    field: 'Environmental Systems',
+    overview: `A thermodynamic feasibility study examining direct air capture (DAC) of CO₂ at varying ambient conditions. The core question is deceptively simple: <em>how much energy does it actually cost to pull dispersed CO₂ from air</em>, and what does that cost mean at scale? At 0.04% atmospheric concentration, the thermodynamics are brutal. This study builds honest models of that brutality before proposing anything.`,
+    methodology: `The study uses entropy generation analysis across the full DAC cycle — intake compression, contact with solid sorbent, temperature-swing regeneration, and gas separation. Sorbent regeneration energy is modeled under varying heat-source quality (low-grade vs. high-grade waste heat). All energy costs are expressed in GJ/tonne CO₂ removed, compared against published pilot-plant data to calibrate the model before any projection.`,
+    findings: `Early results confirm that regeneration dominates the energy budget — roughly 60–70% of total process energy goes into desorbing CO₂ from the sorbent. The model currently projects costs of 3.8–5.2 GJ/tonne under realistic ambient conditions, consistent with the lower bound of published literature. <em>Next phase: integration of pressure-vacuum swing as a lower-energy alternative regeneration pathway.</em>`,
+    params: [
+      { k: 'CO₂ CONCENTRATION', v: '~400 ppm ambient' },
+      { k: 'ENERGY METRIC', v: 'GJ / tonne CO₂' },
+      { k: 'SORBENT TYPE', v: 'Amine-functionalized solid' },
+      { k: 'REGEN METHOD', v: 'Temperature-swing (TSA)' },
+      { k: 'MODEL FIDELITY', v: 'Validated vs. pilot data' },
+      { k: 'CURRENT ESTIMATE', v: '3.8–5.2 GJ/t (prelim.)' },
+    ],
+    tags: ['THERMODYNAMICS','ENVIRONMENTAL','MASS TRANSFER','MODELING','CO₂ CAPTURE']
+  },
+  'BIOCHEM-002': {
+    id: 'BIOCHEM-002 / REV 0.8',
+    title: 'Membrane Filtration<br>Efficiency Study',
+    status: '◐ IN PROGRESS', statusClass: 'status-ongoing',
+    initiated: '2025.11', revision: 'REV 0.8',
+    field: 'Biochemical Engineering',
+    overview: `Membranes are one of nature's most elegant inventions — they filter, select, and hold the line between what belongs inside and what doesn't. This study examines how pore geometry shapes that selectivity in synthetic polymer membranes used for aqueous biochemical separations. The question: <em>does geometry alone account for observed selectivity differences, or does surface chemistry dominate?</em>`,
+    methodology: `Comparative study combining SEM-characterized pore geometry data with computational fluid simulation of flow through idealized pore geometries (cylindrical, slit, funnel). Flux and rejection data from published lab-scale experiments are used to validate the simulation framework. Fouling kinetics are modeled using the complete pore blocking model as a baseline, with depth filtration as the secondary mechanism.`,
+    findings: `Initial results suggest pore geometry has a significant but non-dominant role — surface chemistry (hydrophilicity, charge) accounts for roughly 40% of observed rejection variance in comparable geometries. <em>Fouling patterns in funnel-shaped pores differ significantly from cylindrical equivalents: slower initial flux decline but sharper irreversible fouling onset.</em> This is the most interesting finding so far and the focus of the next revision.`,
+    params: [
+      { k: 'MEMBRANE TYPE', v: 'Polymer ultrafiltration' },
+      { k: 'PORE SIZE RANGE', v: '10–100 nm' },
+      { k: 'TEST SOLUTION', v: 'Protein/dextran aqueous' },
+      { k: 'FOULING MODEL', v: 'Complete + depth blocking' },
+      { k: 'SIMULATION TOOL', v: 'Python (NumPy/SciPy)' },
+      { k: 'CURRENT STAGE', v: 'Fouling mechanism mapping' },
+    ],
+    tags: ['FLUID MECHANICS','BIOCHEMICAL','MEMBRANE TECH','FOULING','SELECTIVITY']
+  },
+  'THERMO-003': {
+    id: 'THERMO-003 / REV 2.0',
+    title: 'Phase Transition<br>Thermodynamics',
+    status: '● ACTIVE', statusClass: 'status-active',
+    initiated: '2025.10', revision: 'REV 2.0',
+    field: 'Thermodynamics',
+    overview: `Phase transitions are the moments when matter decides to change its mind. <em>This study models those decisions in multicomponent systems</em> — when does a mixture decide to separate? At what temperature, under what pressure, by how much? These are not academic questions; they are fundamental to every separation process in chemical engineering, from distillation to crystallization to supercritical extraction.`,
+    methodology: `Gibbs free energy minimization is used as the primary framework. Activity coefficients are computed via the NRTL (Non-Random Two-Liquid) model, selected for its reliable performance across partially miscible systems. Phase diagrams are generated for selected binary and ternary systems and compared against published NIST and DECHEMA experimental data to validate model accuracy before extrapolation.`,
+    findings: `The NRTL model performs well for binary systems with moderate non-ideality (AAD < 5% on bubble point predictions). <em>For strongly asymmetric ternary systems, accuracy degrades predictably — the model over-predicts miscibility near the plait point.</em> The current focus is characterizing where the model fails before proposing corrections. Understanding a model's limits is as useful as understanding its strengths.`,
+    params: [
+      { k: 'PRIMARY MODEL', v: 'Gibbs minimization + NRTL' },
+      { k: 'SYSTEM FOCUS', v: 'Binary & ternary VLE/LLE' },
+      { k: 'VALIDATION DATA', v: 'NIST / DECHEMA database' },
+      { k: 'ACCURACY (BINARY)', v: 'AAD < 5% bubble point' },
+      { k: 'CURRENT CHALLENGE', v: 'Ternary plait-point region' },
+      { k: 'TOOL', v: 'Python (Matplotlib, Pandas)' },
+    ],
+    tags: ['THERMODYNAMICS','PHASE EQUILIBRIA','NRTL','COMPUTATIONAL','VLE/LLE']
+  },
+  'COMP-004': {
+    id: 'COMP-004 / REV 0.5',
+    title: 'CFD Reactor<br>Optimization',
+    status: '◐ IN PROGRESS', statusClass: 'status-ongoing',
+    initiated: '2026.01', revision: 'REV 0.5',
+    field: 'Computational Engineering',
+    overview: `This project is deliberately early and honest about it. The goal is not to publish a result — it is to <em>learn computational fluid dynamics by applying it to a real problem</em>. The problem: how does fluid actually move through a tubular reactor, and does the geometry of the tube matter for conversion efficiency? It does, significantly, and the path to understanding why is through building the model yourself.`,
+    methodology: `Python-based 1D plug-flow reactor models are used as the analytical baseline. CFD simulations are constructed in OpenFOAM for 2D axisymmetric geometries. Residence time distribution (RTD) curves are generated by injecting a tracer pulse in simulation and analyzing the response. Geometries currently being compared: straight tube, tube with Kenics-type static mixers, and coiled tube configurations.`,
+    findings: `The 1D model systematically over-predicts conversion in straight tubes (by ~8–15% for fast reactions), which confirms the importance of radial concentration gradients that the PFR assumption ignores. <em>The coiled tube geometry shows a 23% improvement in RTD uniformity</em> at the same mean residence time. The static mixer comparison is ongoing. This project is teaching me what models assume before they tell you an answer.`,
+    params: [
+      { k: 'SIMULATION TOOL', v: 'OpenFOAM + Python' },
+      { k: 'GEOMETRY TYPES', v: 'Straight / coiled / static mixer' },
+      { k: 'ANALYSIS METHOD', v: 'RTD / Tracer pulse response' },
+      { k: 'BASELINE MODEL', v: '1D plug-flow (PFR)' },
+      { k: 'KEY FINDING', v: '+23% RTD uniformity (coiled)' },
+      { k: 'CURRENT STAGE', v: 'Static mixer comparison' },
+    ],
+    tags: ['CFD','REACTOR DESIGN','PYTHON','OPENFOAM','RTD','NUMERICAL']
+  }
+};
+
+// ===== MISSION PARTICLE BURST =====
+function launchMissionParticles(ox, oy, onComplete) {
+  const canvas = document.getElementById('mission-particles');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.classList.add('active');
+
+  const pts = [];
+  for (let i = 0; i < 72; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.random() * 9 + 2;
+    const amber = Math.random() > 0.45;
+    pts.push({
+      x: ox, y: oy,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      r: Math.random() * 2.5 + 0.8,
+      life: 1,
+      decay: Math.random() * 0.022 + 0.012,
+      amber
+    });
+  }
+
+  let done = false;
+  function step() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let any = false;
+    pts.forEach(p => {
+      if (p.life <= 0) return;
+      any = true;
+      p.x += p.vx; p.y += p.vy;
+      p.vx *= 0.95; p.vy *= 0.95;
+      p.life -= p.decay;
+      const a = Math.max(0, p.life * 0.85);
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * p.life, 0, Math.PI * 2);
+      ctx.fillStyle = p.amber
+        ? `rgba(255, 160, 50, ${a})`
+        : `rgba(0, 210, 245, ${a})`;
+      ctx.fill();
+    });
+    if (!any && !done) {
+      done = true;
+      canvas.classList.remove('active');
+      onComplete && onComplete();
+    } else if (any) {
+      requestAnimationFrame(step);
+    }
+  }
+  requestAnimationFrame(step);
+}
+
+// ===== OPEN MISSION MODAL =====
+function openMission(key, e) {
+  const data = MISSIONS[key];
+  if (!data) return;
+  const rect = e.currentTarget.getBoundingClientRect();
+  const ox = rect.left + rect.width / 2;
+  const oy = rect.top + rect.height / 2;
+
+  launchMissionParticles(ox, oy, () => {
+    populateModal(data);
+    document.getElementById('mission-modal').classList.add('open');
+  });
+}
+
+function populateModal(d) {
+  document.getElementById('modal-mission-id').textContent = 'MISSION-ID: ' + d.id;
+  document.getElementById('modal-mission-title').innerHTML = d.title;
+
+  const statusRow = document.getElementById('modal-status-row');
+  statusRow.innerHTML = `
+    <div class="modal-status-item"><span class="${d.statusClass}">${d.status}</span></div>
+    <div class="modal-status-item">INITIATED<span>${d.initiated}</span></div>
+    <div class="modal-status-item">FIELD<span>${d.field}</span></div>
+    <div class="modal-status-item">REVISION<span>${d.revision}</span></div>
+  `;
+
+  document.getElementById('modal-overview').innerHTML = `<p>${d.overview}</p>`;
+  document.getElementById('modal-methodology').innerHTML = `<p>${d.methodology}</p>`;
+  document.getElementById('modal-findings').innerHTML = `<p>${d.findings}</p>`;
+
+  const paramsEl = document.getElementById('modal-params');
+  paramsEl.innerHTML = d.params.map(p =>
+    `<div class="modal-param"><div class="modal-param-key">${p.k}</div><div class="modal-param-val">${p.v}</div></div>`
+  ).join('');
+
+  const tagsEl = document.getElementById('modal-tags');
+  tagsEl.innerHTML = d.tags.map((t, i) =>
+    `<span class="mission-tag${i % 2 === 1 ? '' : ''}">${t}</span>`
+  ).join('');
+}
+
+function closeMissionModal() {
+  document.getElementById('mission-modal').classList.remove('open');
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeMissionModal(); });
+
+// ===== BOOKSHELF =====
+function openBook(bookId, bookEl) {
+  // Deselect all books and worlds
+  document.querySelectorAll('.book').forEach(b => b.classList.remove('selected'));
+  document.querySelectorAll('.book-world').forEach(w => w.classList.remove('active'));
+
+  // Activate chosen
+  bookEl.classList.add('selected');
+  const world = document.getElementById('world-' + bookId);
+  if (world) {
+    setTimeout(() => {
+      world.classList.add('active');
+      // Trigger fade-ins within newly shown world
+      world.querySelectorAll('.fade-in').forEach(el => el.classList.add('visible'));
+      world.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }, 120);
+  }
+
+  // Warm particle burst from book position
+  const rect = bookEl.getBoundingClientRect();
+  launchBookParticles(rect.left + rect.width / 2, rect.top + rect.height / 2);
+}
+
+function launchBookParticles(ox, oy) {
+  const canvas = document.getElementById('mission-particles');
+  const ctx = canvas.getContext('2d');
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+  canvas.classList.add('active');
+
+  const pts = [];
+  for (let i = 0; i < 36; i++) {
+    const angle = Math.random() * Math.PI * 2;
+    const speed = Math.random() * 5 + 1;
+    pts.push({
+      x: ox, y: oy,
+      vx: Math.cos(angle) * speed,
+      vy: Math.sin(angle) * speed,
+      r: Math.random() * 2 + 0.5,
+      life: 1,
+      decay: Math.random() * 0.028 + 0.015,
+      hue: Math.random() > 0.5 ? 35 : 55   // amber and warm gold
+    });
+  }
+
+  function step() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    let any = false;
+    pts.forEach(p => {
+      if (p.life <= 0) return;
+      any = true;
+      p.x += p.vx; p.y += p.vy;
+      p.vx *= 0.94; p.vy *= 0.94;
+      p.life -= p.decay;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r * p.life, 0, Math.PI * 2);
+      ctx.fillStyle = `hsla(${p.hue}, 90%, 65%, ${p.life * 0.7})`;
+      ctx.fill();
+    });
+    if (!any) { canvas.classList.remove('active'); return; }
+    requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
 </script>
 </body>
 </html>
